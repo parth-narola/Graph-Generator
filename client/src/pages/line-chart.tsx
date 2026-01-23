@@ -68,6 +68,7 @@ interface LineChartConfig {
   yAxisLabel: string;
   yAxisMax: number;
   yAxisStep: number;
+  valueFormat: string;
   lineColor: string;
   pointColor: string;
   annotationBgColor: string;
@@ -87,6 +88,7 @@ const defaultConfig: LineChartConfig = {
   yAxisLabel: "Duration (min)",
   yAxisMax: 30,
   yAxisStep: 5,
+  valueFormat: "",
   lineColor: "#6b8e9c",
   pointColor: "#6b8e9c",
   annotationBgColor: "#ffffff",
@@ -274,6 +276,16 @@ export default function LineChart() {
                         data-testid="input-y-step"
                       />
                     </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Value Suffix</Label>
+                    <Input
+                      value={config.valueFormat}
+                      onChange={(e) => updateConfig("valueFormat", e.target.value)}
+                      placeholder="e.g., K, B, %"
+                      data-testid="input-format"
+                    />
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
@@ -569,7 +581,7 @@ export default function LineChart() {
                           opacity: 0.7
                         }}
                       >
-                        {tick}
+                        {tick}{config.valueFormat}
                       </span>
                     ))}
                   </div>

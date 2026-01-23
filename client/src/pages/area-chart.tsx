@@ -20,6 +20,9 @@ interface ChartConfig {
   title: string;
   xAxisLabel: string;
   yAxisLabel: string;
+  yAxisMax: number;
+  yAxisStep: number;
+  valueFormat: string;
   lineColor: string;
   fillColor: string;
   pointColor: string;
@@ -29,8 +32,6 @@ interface ChartConfig {
   gridColor: string;
   lineWidth: number;
   pointRadius: number;
-  yAxisMax: number;
-  yAxisStep: number;
 }
 
 const defaultDataPoints: DataPoint[] = [
@@ -50,6 +51,9 @@ const defaultConfig: ChartConfig = {
   title: "Global QA/Testing Market and Budget Trends\n(2020-2029)",
   xAxisLabel: "Year",
   yAxisLabel: "Market Size (USD Billion)",
+  yAxisMax: 70,
+  yAxisStep: 10,
+  valueFormat: "B",
   lineColor: "#22c55e",
   fillColor: "#22c55e",
   pointColor: "#22c55e",
@@ -59,8 +63,6 @@ const defaultConfig: ChartConfig = {
   gridColor: "#e5e7eb",
   lineWidth: 2,
   pointRadius: 6,
-  yAxisMax: 70,
-  yAxisStep: 10,
 };
 
 export default function AreaChart() {
@@ -231,6 +233,16 @@ export default function AreaChart() {
                         data-testid="input-y-step"
                       />
                     </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Value Suffix</Label>
+                    <Input
+                      value={config.valueFormat}
+                      onChange={(e) => setConfig({ ...config, valueFormat: e.target.value })}
+                      placeholder="e.g., K, B, %"
+                      data-testid="input-format"
+                    />
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
@@ -539,7 +551,7 @@ export default function AreaChart() {
                                 fontFamily: "'Geist Mono', monospace",
                               }}
                             >
-                              {tick}
+                              {tick}{config.valueFormat}
                             </span>
                           ))}
                         </div>
