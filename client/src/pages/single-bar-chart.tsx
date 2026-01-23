@@ -443,15 +443,16 @@ export default function SingleBarChart() {
               <CardTitle style={{ fontFamily: "'Geist', sans-serif" }}>Preview</CardTitle>
             </CardHeader>
             <CardContent>
-              <div 
-                ref={chartRef}
-                className="rounded-lg p-8"
-                style={{
-                  backgroundColor: config.backgroundColor,
-                  border: `1px solid ${config.borderColor}`,
-                }}
-                data-testid="chart-preview"
-              >
+              <div className="overflow-auto">
+                <div 
+                  ref={chartRef}
+                  className="rounded-lg p-8 min-w-[600px]"
+                  style={{
+                    backgroundColor: config.backgroundColor,
+                    border: `1px solid ${config.borderColor}`,
+                  }}
+                  data-testid="chart-preview"
+                >
                 <div className="flex items-start justify-between mb-2">
                   <h2
                     className="text-xl font-bold flex-1 pr-4"
@@ -588,6 +589,7 @@ export default function SingleBarChart() {
                     {config.yAxisLabel}
                   </div>
                 )}
+              </div>
               </div>
             </CardContent>
           </Card>

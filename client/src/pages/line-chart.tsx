@@ -169,9 +169,9 @@ export default function LineChart() {
     yAxisTicks.push(i);
   }
 
-  const chartHeight = 300;
-  const chartWidth = 600;
-  const padding = { left: 40, right: 40, top: 60, bottom: 40 };
+  const chartHeight = 380;
+  const chartWidth = 700;
+  const padding = { left: 50, right: 50, top: 80, bottom: 50 };
   const plotWidth = chartWidth - padding.left - padding.right;
   const plotHeight = chartHeight - padding.top - padding.bottom;
 
@@ -494,15 +494,16 @@ export default function LineChart() {
               <CardTitle style={{ fontFamily: "'Geist', sans-serif" }}>Preview</CardTitle>
             </CardHeader>
             <CardContent>
-              <div 
-                ref={chartRef}
-                className="rounded-lg p-8"
-                style={{
-                  backgroundColor: config.backgroundColor,
-                  border: `1px solid ${config.borderColor}`,
-                }}
-                data-testid="chart-preview"
-              >
+              <div className="overflow-auto">
+                <div 
+                  ref={chartRef}
+                  className="rounded-lg p-8 min-w-[750px]"
+                  style={{
+                    backgroundColor: config.backgroundColor,
+                    border: `1px solid ${config.borderColor}`,
+                  }}
+                  data-testid="chart-preview"
+                >
                 <div className="flex items-start justify-between mb-8">
                   <h2
                     className="text-xl font-bold flex-1 pr-4"
@@ -599,28 +600,37 @@ export default function LineChart() {
 
                       {config.showAnnotations && config.dataPoints.map((dp, index) => {
                         const { x, y } = getPointPosition(index, dp.value);
-                        const annotationLines = dp.annotation.split('\n').length > 1 
-                          ? dp.annotation.split('\n') 
-                          : dp.annotation.length > 15 
-                            ? [dp.annotation.slice(0, Math.ceil(dp.annotation.length / 2)), dp.annotation.slice(Math.ceil(dp.annotation.length / 2))]
-                            : [dp.annotation];
-                        const maxLineLength = Math.max(...annotationLines.map(l => l.length), String(dp.value).length);
-                        const boxWidth = Math.max(70, maxLineLength * 7 + 20);
-                        const boxHeight = 28 + annotationLines.length * 14;
+                        const words = dp.annotation.split(' ');
+                        let annotationLines: string[] = [];
+                        if (words.length > 2) {
+                          const mid = Math.ceil(words.length / 2);
+                          annotationLines = [
+                            words.slice(0, mid).join(' '),
+                            words.slice(mid).join(' ')
+                          ];
+                        } else {
+                          annotationLines = [dp.annotation];
+                        }
+                        const maxLineLength = Math.max(...annotationLines.map(l => l.length), String(dp.value).length + 2);
+                        const boxWidth = Math.max(80, Math.min(120, maxLineLength * 7 + 24));
+                        const boxHeight = 30 + annotationLines.length * 14;
                         const isAbove = index % 2 === 0;
-                        const boxY = isAbove ? y - boxHeight - 15 : y + 15;
-                        const boxX = x - boxWidth / 2;
+                        const boxY = isAbove ? y - boxHeight - 20 : y + 20;
+                        const boxX = Math.max(5, Math.min(chartWidth - boxWidth - 5, x - boxWidth / 2));
+                        
+                        const connectorX = x;
                         
                         return (
                           <g key={`annotation-${dp.id}`}>
                             <line
-                              x1={x}
-                              y1={y + (isAbove ? -config.pointSize/2 - 2 : config.pointSize/2 + 2)}
-                              x2={x}
-                              y2={isAbove ? boxY + boxHeight : boxY}
+                              x1={connectorX}
+                              y1={y + (isAbove ? -config.pointSize/2 - 4 : config.pointSize/2 + 4)}
+                              x2={connectorX}
+                              y2={isAbove ? boxY + boxHeight + 2 : boxY - 2}
                               stroke={config.textColor}
-                              strokeOpacity={0.2}
+                              strokeOpacity={0.15}
                               strokeWidth={1}
+                              strokeDasharray="3 3"
                             />
                             <rect
                               x={boxX}
@@ -690,6 +700,7 @@ export default function LineChart() {
                     </svg>
                   </div>
                 </div>
+              </div>
               </div>
             </CardContent>
           </Card>
