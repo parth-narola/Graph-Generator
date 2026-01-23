@@ -740,6 +740,15 @@ export default function LineChart() {
                     </svg>
                   </div>
                 </div>
+
+                {config.xAxisLabel && (
+                  <div
+                    className="text-center mt-2 text-sm"
+                    style={{ color: config.textColor, fontFamily: "'Geist', sans-serif", fontStyle: "italic", opacity: 0.8 }}
+                  >
+                    {config.xAxisLabel}
+                  </div>
+                )}
               </div>
               </div>
             </CardContent>

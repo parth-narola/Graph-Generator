@@ -663,6 +663,15 @@ export default function AreaChart() {
                         </div>
                       </div>
                     </div>
+
+                    {config.xAxisLabel && (
+                      <div
+                        className="text-center mt-2 text-sm"
+                        style={{ color: config.labelColor, fontFamily: "'Geist', sans-serif", fontStyle: "italic" }}
+                      >
+                        {config.xAxisLabel}
+                      </div>
+                    )}
                   </div>
                 </div>
               </CardContent>

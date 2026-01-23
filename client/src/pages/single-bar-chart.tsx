@@ -600,12 +600,12 @@ export default function SingleBarChart() {
                   </div>
                 </div>
 
-                {config.yAxisLabel && (
+                {config.xAxisLabel && (
                   <div
                     className="text-center mt-4 text-sm"
-                    style={{ color: config.textColor, fontFamily: "'Geist', sans-serif" }}
+                    style={{ color: config.textColor, fontFamily: "'Geist', sans-serif", fontStyle: "italic" }}
                   >
-                    {config.yAxisLabel}
+                    {config.xAxisLabel}
                   </div>
                 )}
               </div>
