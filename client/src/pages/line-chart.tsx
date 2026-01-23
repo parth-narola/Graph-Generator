@@ -597,7 +597,7 @@ export default function LineChart() {
                       {yAxisTicks.map((tick) => (
                         <line
                           key={tick}
-                          x1={0}
+                          x1={padding.left}
                           y1={padding.top + plotHeight - (tick / config.yAxisMax) * plotHeight}
                           x2={chartWidth - padding.right}
                           y2={padding.top + plotHeight - (tick / config.yAxisMax) * plotHeight}
