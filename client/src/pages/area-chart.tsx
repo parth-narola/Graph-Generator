@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Download, Plus, Trash2, RotateCcw } from "lucide-react";
 import { toPng } from "html-to-image";
 import { useToast } from "@/hooks/use-toast";
@@ -170,23 +172,297 @@ export default function AreaChart() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          <div className="xl:col-span-2 space-y-4">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg">Chart Preview</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="overflow-auto" style={{ minWidth: "100%" }}>
-                  <div
-                    ref={chartRef}
-                    data-testid="chart-preview"
-                    style={{
-                      backgroundColor: config.backgroundColor,
-                      padding: "20px",
-                      minWidth: `${chartWidth + 40}px`,
-                    }}
-                  >
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <Card className="lg:col-span-1">
+            <CardHeader>
+              <CardTitle style={{ fontFamily: "'Geist', sans-serif" }}>Configuration</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ScrollArea className="h-[calc(100vh-220px)]">
+                <div className="space-y-6 pr-4">
+                  <div className="space-y-2">
+                    <Label>Chart Title</Label>
+                    <textarea
+                      value={config.title}
+                      onChange={(e) => setConfig({ ...config, title: e.target.value })}
+                      className="w-full p-2 border rounded-md text-sm resize-none bg-background"
+                      rows={2}
+                      data-testid="input-title"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Y-Axis Label</Label>
+                    <Input
+                      value={config.yAxisLabel}
+                      onChange={(e) => setConfig({ ...config, yAxisLabel: e.target.value })}
+                      data-testid="input-y-axis-label"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <Label>Y-Axis Max</Label>
+                      <Input
+                        type="number"
+                        value={config.yAxisMax}
+                        onChange={(e) => setConfig({ ...config, yAxisMax: Number(e.target.value) })}
+                        data-testid="input-y-max"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Y-Axis Step</Label>
+                      <Input
+                        type="number"
+                        value={config.yAxisStep}
+                        onChange={(e) => setConfig({ ...config, yAxisStep: Number(e.target.value) })}
+                        data-testid="input-y-step"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <Label>Line Width</Label>
+                      <Input
+                        type="number"
+                        value={config.lineWidth}
+                        onChange={(e) => setConfig({ ...config, lineWidth: Number(e.target.value) })}
+                        min={1}
+                        max={10}
+                        data-testid="input-line-width"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Point Size</Label>
+                      <Input
+                        type="number"
+                        value={config.pointRadius}
+                        onChange={(e) => setConfig({ ...config, pointRadius: Number(e.target.value) })}
+                        min={2}
+                        max={15}
+                        data-testid="input-point-size"
+                      />
+                    </div>
+                  </div>
+
+                  <Separator />
+
+                  <div className="space-y-3">
+                    <Label className="text-sm font-medium">Colors</Label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <Label className="text-xs">Line Color</Label>
+                        <div className="flex gap-1">
+                          <input
+                            type="color"
+                            value={config.lineColor}
+                            onChange={(e) => setConfig({ ...config, lineColor: e.target.value })}
+                            className="w-10 h-8 rounded cursor-pointer"
+                            data-testid="color-line"
+                          />
+                          <Input
+                            value={config.lineColor}
+                            onChange={(e) => setConfig({ ...config, lineColor: e.target.value })}
+                            className="flex-1 h-8 text-xs"
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-xs">Fill Color</Label>
+                        <div className="flex gap-1">
+                          <input
+                            type="color"
+                            value={config.fillColor}
+                            onChange={(e) => setConfig({ ...config, fillColor: e.target.value })}
+                            className="w-10 h-8 rounded cursor-pointer"
+                            data-testid="color-fill"
+                          />
+                          <Input
+                            value={config.fillColor}
+                            onChange={(e) => setConfig({ ...config, fillColor: e.target.value })}
+                            className="flex-1 h-8 text-xs"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <Label className="text-xs">Point Color</Label>
+                        <div className="flex gap-1">
+                          <input
+                            type="color"
+                            value={config.pointColor}
+                            onChange={(e) => setConfig({ ...config, pointColor: e.target.value })}
+                            className="w-10 h-8 rounded cursor-pointer"
+                            data-testid="color-point"
+                          />
+                          <Input
+                            value={config.pointColor}
+                            onChange={(e) => setConfig({ ...config, pointColor: e.target.value })}
+                            className="flex-1 h-8 text-xs"
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-xs">Background</Label>
+                        <div className="flex gap-1">
+                          <input
+                            type="color"
+                            value={config.backgroundColor}
+                            onChange={(e) => setConfig({ ...config, backgroundColor: e.target.value })}
+                            className="w-10 h-8 rounded cursor-pointer"
+                            data-testid="color-background"
+                          />
+                          <Input
+                            value={config.backgroundColor}
+                            onChange={(e) => setConfig({ ...config, backgroundColor: e.target.value })}
+                            className="flex-1 h-8 text-xs"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <Label className="text-xs">Title Color</Label>
+                        <div className="flex gap-1">
+                          <input
+                            type="color"
+                            value={config.textColor}
+                            onChange={(e) => setConfig({ ...config, textColor: e.target.value })}
+                            className="w-10 h-8 rounded cursor-pointer"
+                            data-testid="color-text"
+                          />
+                          <Input
+                            value={config.textColor}
+                            onChange={(e) => setConfig({ ...config, textColor: e.target.value })}
+                            className="flex-1 h-8 text-xs"
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-xs">Label Color</Label>
+                        <div className="flex gap-1">
+                          <input
+                            type="color"
+                            value={config.labelColor}
+                            onChange={(e) => setConfig({ ...config, labelColor: e.target.value })}
+                            className="w-10 h-8 rounded cursor-pointer"
+                            data-testid="color-label"
+                          />
+                          <Input
+                            value={config.labelColor}
+                            onChange={(e) => setConfig({ ...config, labelColor: e.target.value })}
+                            className="flex-1 h-8 text-xs"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-xs">Grid Color</Label>
+                      <div className="flex gap-1">
+                        <input
+                          type="color"
+                          value={config.gridColor}
+                          onChange={(e) => setConfig({ ...config, gridColor: e.target.value })}
+                          className="w-10 h-8 rounded cursor-pointer"
+                          data-testid="color-grid"
+                        />
+                        <Input
+                          value={config.gridColor}
+                          onChange={(e) => setConfig({ ...config, gridColor: e.target.value })}
+                          className="flex-1 h-8 text-xs"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <Separator />
+
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <Label>Data Points</Label>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={addDataPoint}
+                        data-testid="button-add-point"
+                      >
+                        <Plus className="w-4 h-4 mr-1" />
+                        Add
+                      </Button>
+                    </div>
+                    <div className="space-y-3">
+                      {dataPoints.map((dp, index) => (
+                        <Card key={index} className="p-3">
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm font-medium">Point {index + 1}</span>
+                              <Button
+                                size="icon"
+                                variant="ghost"
+                                onClick={() => removeDataPoint(index)}
+                                disabled={dataPoints.length <= 2}
+                                data-testid={`button-remove-${index}`}
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </div>
+                            <div className="grid grid-cols-3 gap-2">
+                              <div>
+                                <Label className="text-xs">Label</Label>
+                                <Input
+                                  value={dp.label}
+                                  onChange={(e) => updateDataPoint(index, "label", e.target.value)}
+                                  className="h-8"
+                                  data-testid={`input-label-${index}`}
+                                />
+                              </div>
+                              <div>
+                                <Label className="text-xs">Value</Label>
+                                <Input
+                                  type="number"
+                                  value={dp.value}
+                                  onChange={(e) => updateDataPoint(index, "value", e.target.value)}
+                                  className="h-8"
+                                  data-testid={`input-value-${index}`}
+                                />
+                              </div>
+                              <div>
+                                <Label className="text-xs">Display</Label>
+                                <Input
+                                  value={dp.displayValue}
+                                  onChange={(e) => updateDataPoint(index, "displayValue", e.target.value)}
+                                  className="h-8"
+                                  placeholder="e.g., 30B"
+                                  data-testid={`input-display-${index}`}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </ScrollArea>
+            </CardContent>
+          </Card>
+
+          <Card className="lg:col-span-2">
+            <CardHeader>
+              <CardTitle style={{ fontFamily: "'Geist', sans-serif" }}>Preview</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-auto">
+                <div
+                  ref={chartRef}
+                  data-testid="chart-preview"
+                  className="rounded-lg p-8 min-w-[600px]"
+                  style={{
+                    backgroundColor: config.backgroundColor,
+                  }}
+                >
                     <div className="flex justify-between items-start mb-4">
                       <div style={{ maxWidth: "70%" }}>
                         {config.title.split("\n").map((line, i) => (
@@ -357,281 +633,6 @@ export default function AreaChart() {
                 </div>
               </CardContent>
             </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg flex items-center justify-between">
-                  Data Points
-                  <Button size="sm" onClick={addDataPoint} data-testid="button-add-point">
-                    <Plus className="w-4 h-4 mr-1" />
-                    Add Point
-                  </Button>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3 max-h-80 overflow-y-auto">
-                  {dataPoints.map((dp, index) => (
-                    <div
-                      key={index}
-                      className="grid grid-cols-4 gap-2 items-center p-2 rounded-md bg-muted/50"
-                      data-testid={`data-point-${index}`}
-                    >
-                      <div>
-                        <Label className="text-xs text-muted-foreground">Label</Label>
-                        <Input
-                          value={dp.label}
-                          onChange={(e) => updateDataPoint(index, "label", e.target.value)}
-                          className="h-8"
-                          data-testid={`input-label-${index}`}
-                        />
-                      </div>
-                      <div>
-                        <Label className="text-xs text-muted-foreground">Value</Label>
-                        <Input
-                          type="number"
-                          value={dp.value}
-                          onChange={(e) => updateDataPoint(index, "value", e.target.value)}
-                          className="h-8"
-                          data-testid={`input-value-${index}`}
-                        />
-                      </div>
-                      <div>
-                        <Label className="text-xs text-muted-foreground">Display</Label>
-                        <Input
-                          value={dp.displayValue}
-                          onChange={(e) => updateDataPoint(index, "displayValue", e.target.value)}
-                          className="h-8"
-                          placeholder="e.g., 30B"
-                          data-testid={`input-display-${index}`}
-                        />
-                      </div>
-                      <div className="flex justify-end pt-4">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => removeDataPoint(index)}
-                          disabled={dataPoints.length <= 2}
-                          data-testid={`button-remove-${index}`}
-                        >
-                          <Trash2 className="w-4 h-4 text-destructive" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="space-y-4">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg">Chart Settings</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label>Chart Title</Label>
-                  <textarea
-                    value={config.title}
-                    onChange={(e) => setConfig({ ...config, title: e.target.value })}
-                    className="w-full mt-1 p-2 border rounded-md text-sm resize-none bg-background"
-                    rows={2}
-                    data-testid="input-title"
-                  />
-                </div>
-                <div>
-                  <Label>Y-Axis Label</Label>
-                  <Input
-                    value={config.yAxisLabel}
-                    onChange={(e) => setConfig({ ...config, yAxisLabel: e.target.value })}
-                    className="mt-1"
-                    data-testid="input-y-axis-label"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <Label>Y-Axis Max</Label>
-                    <Input
-                      type="number"
-                      value={config.yAxisMax}
-                      onChange={(e) => setConfig({ ...config, yAxisMax: Number(e.target.value) })}
-                      className="mt-1"
-                      data-testid="input-y-max"
-                    />
-                  </div>
-                  <div>
-                    <Label>Y-Axis Step</Label>
-                    <Input
-                      type="number"
-                      value={config.yAxisStep}
-                      onChange={(e) => setConfig({ ...config, yAxisStep: Number(e.target.value) })}
-                      className="mt-1"
-                      data-testid="input-y-step"
-                    />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <Label>Line Width</Label>
-                    <Input
-                      type="number"
-                      value={config.lineWidth}
-                      onChange={(e) => setConfig({ ...config, lineWidth: Number(e.target.value) })}
-                      className="mt-1"
-                      min={1}
-                      max={10}
-                      data-testid="input-line-width"
-                    />
-                  </div>
-                  <div>
-                    <Label>Point Size</Label>
-                    <Input
-                      type="number"
-                      value={config.pointRadius}
-                      onChange={(e) => setConfig({ ...config, pointRadius: Number(e.target.value) })}
-                      className="mt-1"
-                      min={2}
-                      max={15}
-                      data-testid="input-point-size"
-                    />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg">Colors</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <Label className="text-sm">Line Color</Label>
-                    <div className="flex gap-2 mt-1">
-                      <input
-                        type="color"
-                        value={config.lineColor}
-                        onChange={(e) => setConfig({ ...config, lineColor: e.target.value })}
-                        className="w-10 h-9 rounded cursor-pointer"
-                        data-testid="color-line"
-                      />
-                      <Input
-                        value={config.lineColor}
-                        onChange={(e) => setConfig({ ...config, lineColor: e.target.value })}
-                        className="flex-1 h-9"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <Label className="text-sm">Fill Color</Label>
-                    <div className="flex gap-2 mt-1">
-                      <input
-                        type="color"
-                        value={config.fillColor}
-                        onChange={(e) => setConfig({ ...config, fillColor: e.target.value })}
-                        className="w-10 h-9 rounded cursor-pointer"
-                        data-testid="color-fill"
-                      />
-                      <Input
-                        value={config.fillColor}
-                        onChange={(e) => setConfig({ ...config, fillColor: e.target.value })}
-                        className="flex-1 h-9"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <Label className="text-sm">Point Color</Label>
-                    <div className="flex gap-2 mt-1">
-                      <input
-                        type="color"
-                        value={config.pointColor}
-                        onChange={(e) => setConfig({ ...config, pointColor: e.target.value })}
-                        className="w-10 h-9 rounded cursor-pointer"
-                        data-testid="color-point"
-                      />
-                      <Input
-                        value={config.pointColor}
-                        onChange={(e) => setConfig({ ...config, pointColor: e.target.value })}
-                        className="flex-1 h-9"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <Label className="text-sm">Background</Label>
-                    <div className="flex gap-2 mt-1">
-                      <input
-                        type="color"
-                        value={config.backgroundColor}
-                        onChange={(e) => setConfig({ ...config, backgroundColor: e.target.value })}
-                        className="w-10 h-9 rounded cursor-pointer"
-                        data-testid="color-background"
-                      />
-                      <Input
-                        value={config.backgroundColor}
-                        onChange={(e) => setConfig({ ...config, backgroundColor: e.target.value })}
-                        className="flex-1 h-9"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <Label className="text-sm">Title Color</Label>
-                    <div className="flex gap-2 mt-1">
-                      <input
-                        type="color"
-                        value={config.textColor}
-                        onChange={(e) => setConfig({ ...config, textColor: e.target.value })}
-                        className="w-10 h-9 rounded cursor-pointer"
-                        data-testid="color-text"
-                      />
-                      <Input
-                        value={config.textColor}
-                        onChange={(e) => setConfig({ ...config, textColor: e.target.value })}
-                        className="flex-1 h-9"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <Label className="text-sm">Label Color</Label>
-                    <div className="flex gap-2 mt-1">
-                      <input
-                        type="color"
-                        value={config.labelColor}
-                        onChange={(e) => setConfig({ ...config, labelColor: e.target.value })}
-                        className="w-10 h-9 rounded cursor-pointer"
-                        data-testid="color-label"
-                      />
-                      <Input
-                        value={config.labelColor}
-                        onChange={(e) => setConfig({ ...config, labelColor: e.target.value })}
-                        className="flex-1 h-9"
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <Label className="text-sm">Grid Color</Label>
-                  <div className="flex gap-2 mt-1">
-                    <input
-                      type="color"
-                      value={config.gridColor}
-                      onChange={(e) => setConfig({ ...config, gridColor: e.target.value })}
-                      className="w-10 h-9 rounded cursor-pointer"
-                      data-testid="color-grid"
-                    />
-                    <Input
-                      value={config.gridColor}
-                      onChange={(e) => setConfig({ ...config, gridColor: e.target.value })}
-                      className="flex-1 h-9"
-                    />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
         </div>
       </div>
     </div>

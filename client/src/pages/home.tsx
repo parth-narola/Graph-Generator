@@ -167,25 +167,26 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background p-4 md:p-6">
       <div className="max-w-[1600px] mx-auto">
-        <header className="mb-6">
+        <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight" style={{ fontFamily: "'Geist', sans-serif" }}>
-            Chart Generator
+            Comparison Chart Generator
           </h1>
-          <p className="text-muted-foreground mt-1">
-            Create beautiful comparison bar charts with full customization
-          </p>
-        </header>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={resetToDefault} data-testid="button-reset">
+              <RotateCcw className="w-4 h-4 mr-2" />
+              Reset
+            </Button>
+            <Button onClick={exportToPng} disabled={isExporting} data-testid="button-export">
+              <Download className="w-4 h-4 mr-2" />
+              {isExporting ? "Exporting..." : "Export PNG"}
+            </Button>
+          </div>
+        </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-[400px_1fr] gap-6">
-          <Card className="h-fit">
-            <CardHeader className="pb-4">
-              <div className="flex items-center justify-between gap-2 flex-wrap">
-                <CardTitle className="text-lg">Configuration</CardTitle>
-                <Button variant="outline" size="sm" onClick={resetToDefault} data-testid="button-reset">
-                  <RotateCcw className="w-4 h-4 mr-2" />
-                  Reset
-                </Button>
-              </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <Card className="lg:col-span-1">
+            <CardHeader>
+              <CardTitle style={{ fontFamily: "'Geist', sans-serif" }}>Configuration</CardTitle>
             </CardHeader>
             <CardContent>
               <ScrollArea className="h-[calc(100vh-280px)] pr-4">
@@ -432,26 +433,21 @@ export default function Home() {
             </CardContent>
           </Card>
 
-          <div className="space-y-4">
-            <div className="flex items-center justify-between gap-4 flex-wrap">
-              <h2 className="text-lg font-semibold">Preview</h2>
-              <Button onClick={exportToPng} disabled={isExporting} data-testid="button-export">
-                <Download className="w-4 h-4 mr-2" />
-                {isExporting ? "Exporting..." : "Export PNG"}
-              </Button>
-            </div>
-
-            <div className="overflow-auto rounded-md border">
-              <div
-                ref={chartRef}
-                className="p-8 min-w-[800px]"
-                style={{
-                  backgroundColor: config.backgroundColor,
-                  border: `2px solid ${config.borderColor}`,
-                  borderRadius: "12px",
-                  fontFamily: "'Geist', sans-serif",
-                }}
-              >
+          <Card className="lg:col-span-2">
+            <CardHeader>
+              <CardTitle style={{ fontFamily: "'Geist', sans-serif" }}>Preview</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-auto">
+                <div
+                  ref={chartRef}
+                  className="rounded-lg p-8 min-w-[600px]"
+                  style={{
+                    backgroundColor: config.backgroundColor,
+                    border: `1px solid ${config.borderColor}`,
+                  }}
+                  data-testid="chart-preview"
+                >
                 <div className="flex justify-between items-start mb-8">
                   <h2
                     className="text-2xl font-semibold max-w-[70%] leading-tight"
@@ -562,7 +558,8 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          </div>
+          </CardContent>
+        </Card>
         </div>
       </div>
     </div>
