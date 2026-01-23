@@ -439,50 +439,63 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="flex items-end justify-between gap-4 mb-4" style={{ height: "300px" }}>
-                  {config.dataPoints.map((dp) => {
-                    const percentChange = getPercentageChange(dp.value1, dp.value2);
-                    const height1 = maxValue > 0 ? (dp.value1 / maxValue) * 250 : 0;
-                    const height2 = maxValue > 0 ? (dp.value2 / maxValue) * 250 : 0;
-                    
-                    return (
-                      <div key={dp.id} className="flex flex-col items-center flex-1">
-                        {config.showPercentageChange && (
-                          <div
-                            className="text-sm font-medium mb-2"
-                            style={{
-                              color: percentChange >= 0 ? config.textColor : config.textColor,
-                              fontFamily: "'Geist Mono', monospace",
-                            }}
-                          >
-                            {percentChange >= 0 ? "+" : ""}{percentChange}%
+                <div className="flex flex-col">
+                  <div className="flex items-end justify-between gap-4" style={{ height: "280px" }}>
+                    {config.dataPoints.map((dp) => {
+                      const percentChange = getPercentageChange(dp.value1, dp.value2);
+                      const height1 = maxValue > 0 ? (dp.value1 / maxValue) * 230 : 0;
+                      const height2 = maxValue > 0 ? (dp.value2 / maxValue) * 230 : 0;
+                      
+                      return (
+                        <div key={dp.id} className="flex flex-col items-center flex-1">
+                          {config.showPercentageChange && (
+                            <div
+                              className="text-sm font-medium mb-2"
+                              style={{
+                                color: config.textColor,
+                                fontFamily: "'Geist Mono', monospace",
+                              }}
+                            >
+                              {percentChange >= 0 ? "+" : ""}{percentChange}%
+                            </div>
+                          )}
+                          <div className="flex items-end gap-1">
+                            <div
+                              className="w-10 rounded-t-sm transition-all duration-300"
+                              style={{
+                                height: `${height1}px`,
+                                backgroundColor: config.bar1Color,
+                              }}
+                            />
+                            <div
+                              className="w-10 rounded-t-sm transition-all duration-300"
+                              style={{
+                                height: `${height2}px`,
+                                backgroundColor: config.bar2Color,
+                              }}
+                            />
                           </div>
-                        )}
-                        <div className="flex items-end gap-1">
-                          <div
-                            className="w-10 rounded-t-sm transition-all duration-300"
-                            style={{
-                              height: `${height1}px`,
-                              backgroundColor: config.bar1Color,
-                            }}
-                          />
-                          <div
-                            className="w-10 rounded-t-sm transition-all duration-300"
-                            style={{
-                              height: `${height2}px`,
-                              backgroundColor: config.bar2Color,
-                            }}
-                          />
                         </div>
-                        <div
-                          className="mt-3 text-sm text-center"
-                          style={{ color: config.textColor, fontFamily: "'Geist', sans-serif" }}
-                        >
-                          {dp.label}
-                        </div>
+                      );
+                    })}
+                  </div>
+                  
+                  <div 
+                    className="w-full h-px mt-2"
+                    style={{ backgroundColor: config.textColor, opacity: 0.3 }}
+                  />
+                  
+                  <div className="flex justify-between gap-4 mt-3">
+                    {config.dataPoints.map((dp) => (
+                      <div
+                        key={dp.id}
+                        className="flex-1 text-sm text-center"
+                        style={{ color: config.textColor, fontFamily: "'Geist', sans-serif" }}
+                      >
+                        {dp.label}
                       </div>
-                    );
-                  })}
+                    ))}
+                  </div>
                 </div>
 
                 <div
