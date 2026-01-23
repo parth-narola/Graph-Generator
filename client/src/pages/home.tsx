@@ -426,15 +426,15 @@ export default function Home() {
                   }}
                   data-testid="chart-preview"
                 >
-                <div className="flex justify-between items-start mb-8">
+                <div className="flex items-start justify-between mb-2">
                   <h2
-                    className="text-2xl font-semibold max-w-[70%] leading-tight"
+                    className="text-xl font-bold flex-1 pr-4"
                     style={{ color: config.textColor, fontFamily: "'Geist', sans-serif" }}
                   >
                     {config.title}
                   </h2>
-                  <div className="flex items-center gap-2">
-                    <img src={testdinoLogo} alt="TestDino" className="h-12 object-contain" />
+                  <div className="flex items-center shrink-0">
+                    <img src={testdinoLogo} alt="TestDino" className="h-8 w-auto" />
                   </div>
                 </div>
 

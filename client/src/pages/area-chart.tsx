@@ -549,6 +549,7 @@ export default function AreaChart() {
                               style={{
                                 color: config.labelColor,
                                 fontFamily: "'Geist Mono', monospace",
+                                opacity: 0.7,
                               }}
                             >
                               {tick}{config.valueFormat}
