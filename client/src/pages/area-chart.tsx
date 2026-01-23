@@ -598,11 +598,12 @@ export default function AreaChart() {
                             {yAxisTicks.map((tick) => (
                               <line
                                 key={tick}
-                                x1={padding.left}
+                                x1={0}
                                 y1={getY(tick)}
                                 x2={chartWidth - padding.right}
                                 y2={getY(tick)}
                                 stroke={config.gridColor}
+                                strokeOpacity={tick === 0 ? 0.3 : 0.1}
                                 strokeWidth={1}
                               />
                             ))}
