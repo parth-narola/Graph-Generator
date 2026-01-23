@@ -568,8 +568,8 @@ export default function LineChart() {
 
                 <div className="flex" style={{ minHeight: `${chartHeight + 40}px` }}>
                   <div 
-                    className="flex flex-col justify-between pr-3 text-right shrink-0"
-                    style={{ height: `${chartHeight}px`, paddingTop: `${padding.top}px`, paddingBottom: `${padding.bottom}px`, minWidth: '35px' }}
+                    className="flex flex-col justify-between pr-2 text-right shrink-0"
+                    style={{ height: `${chartHeight}px`, paddingTop: `${padding.top}px`, paddingBottom: `${padding.bottom}px`, minWidth: '30px' }}
                   >
                     {[...yAxisTicks].reverse().map((tick) => (
                       <span

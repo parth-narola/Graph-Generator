@@ -526,7 +526,7 @@ export default function AreaChart() {
                     <div className="flex" style={{ minHeight: `${chartHeight}px` }}>
                       <div
                         className="flex items-center justify-center shrink-0"
-                        style={{ width: "30px", height: `${chartHeight}px` }}
+                        style={{ width: "20px", height: `${chartHeight}px` }}
                       >
                         <span
                           style={{
