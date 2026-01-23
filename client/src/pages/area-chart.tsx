@@ -525,7 +525,7 @@ export default function AreaChart() {
 
                     <div className="flex" style={{ minHeight: `${chartHeight}px` }}>
                       <div
-                        className="flex items-center justify-center shrink-0"
+                        className="flex items-center justify-center shrink-0 mr-2"
                         style={{ width: "20px", height: `${chartHeight}px` }}
                       >
                         <span
@@ -666,7 +666,7 @@ export default function AreaChart() {
 
                     {config.xAxisLabel && (
                       <div
-                        className="text-center mt-2 text-sm"
+                        className="text-center mt-1 text-sm"
                         style={{ color: config.labelColor, fontFamily: "'Geist', sans-serif", fontStyle: "italic" }}
                       >
                         {config.xAxisLabel}
