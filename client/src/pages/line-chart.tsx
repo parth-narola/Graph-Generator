@@ -612,7 +612,7 @@ export default function LineChart() {
                           annotationLines = [dp.annotation];
                         }
                         const maxLineLength = Math.max(...annotationLines.map(l => l.length), String(dp.value).length + 2);
-                        const boxWidth = Math.max(80, Math.min(120, maxLineLength * 7 + 24));
+                        const boxWidth = Math.max(80, maxLineLength * 6.5 + 20);
                         const boxHeight = 30 + annotationLines.length * 14;
                         const isAbove = index % 2 === 0;
                         const boxY = isAbove ? y - boxHeight - 20 : y + 20;
