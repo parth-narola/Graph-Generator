@@ -1,12 +1,18 @@
 import { useState, useRef, useCallback } from "react";
-import { toPng } from "html-to-image";
+import { toPng, toSvg } from "html-to-image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Download, Plus, Trash2, RotateCcw } from "lucide-react";
+import { Download, Plus, Trash2, RotateCcw, ChevronDown } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import testdinoLogo from "@assets/image_1769153159547.png";
 
 function hexToHsl(hex: string): { h: number; s: number; l: number } {
@@ -132,20 +138,31 @@ export default function Home() {
     setConfig(defaultConfig);
   };
 
-  const exportToPng = useCallback(async () => {
+  const exportChart = useCallback(async (format: "png" | "svg") => {
     if (!chartRef.current) return;
     
     setIsExporting(true);
     try {
-      const dataUrl = await toPng(chartRef.current, {
+      const options = {
         quality: 1,
         pixelRatio: 2,
         backgroundColor: config.backgroundColor,
         skipFonts: true,
-      });
+      };
+      
+      let dataUrl: string;
+      let filename: string;
+      
+      if (format === "svg") {
+        dataUrl = await toSvg(chartRef.current, options);
+        filename = "comparison-chart.svg";
+      } else {
+        dataUrl = await toPng(chartRef.current, options);
+        filename = "comparison-chart.png";
+      }
       
       const link = document.createElement("a");
-      link.download = "testdino-chart.png";
+      link.download = filename;
       link.href = dataUrl;
       link.click();
     } catch (err) {
@@ -176,10 +193,23 @@ export default function Home() {
               <RotateCcw className="w-4 h-4 mr-2" />
               Reset
             </Button>
-            <Button onClick={exportToPng} disabled={isExporting} data-testid="button-export">
-              <Download className="w-4 h-4 mr-2" />
-              {isExporting ? "Exporting..." : "Export PNG"}
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button disabled={isExporting} data-testid="button-export">
+                  <Download className="w-4 h-4 mr-2" />
+                  {isExporting ? "Exporting..." : "Export"}
+                  <ChevronDown className="w-4 h-4 ml-2" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onClick={() => exportChart("png")} data-testid="export-png">
+                  Export as PNG
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => exportChart("svg")} data-testid="export-svg">
+                  Export as SVG
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
 

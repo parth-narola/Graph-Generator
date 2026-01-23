@@ -5,8 +5,14 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Download, Plus, Trash2, RotateCcw } from "lucide-react";
-import { toPng } from "html-to-image";
+import { Download, Plus, Trash2, RotateCcw, ChevronDown } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { toPng, toSvg } from "html-to-image";
 import { useToast } from "@/hooks/use-toast";
 import testDinoLogo from "@assets/image_1769153159547.png";
 
@@ -99,25 +105,39 @@ export default function AreaChart() {
 
   const areaPath = `${linePath} L ${getX(dataPoints.length - 1)} ${padding.top + plotHeight} L ${getX(0)} ${padding.top + plotHeight} Z`;
 
-  const handleExport = useCallback(async () => {
+  const [isExporting, setIsExporting] = useState(false);
+
+  const exportChart = useCallback(async (format: "png" | "svg") => {
     if (!chartRef.current) return;
 
+    setIsExporting(true);
     try {
-      const dataUrl = await toPng(chartRef.current, {
+      const options = {
         quality: 1.0,
         pixelRatio: 2,
         backgroundColor: config.backgroundColor,
         skipFonts: true,
-      });
+      };
+
+      let dataUrl: string;
+      let filename: string;
+
+      if (format === "svg") {
+        dataUrl = await toSvg(chartRef.current, options);
+        filename = "area-chart.svg";
+      } else {
+        dataUrl = await toPng(chartRef.current, options);
+        filename = "area-chart.png";
+      }
 
       const link = document.createElement("a");
-      link.download = "area-chart.png";
+      link.download = filename;
       link.href = dataUrl;
       link.click();
 
       toast({
         title: "Export Successful",
-        description: "Your chart has been exported as PNG",
+        description: `Your chart has been exported as ${format.toUpperCase()}`,
       });
     } catch (error) {
       toast({
@@ -125,6 +145,8 @@ export default function AreaChart() {
         description: "There was an error exporting the chart",
         variant: "destructive",
       });
+    } finally {
+      setIsExporting(false);
     }
   }, [config.backgroundColor, toast]);
 
@@ -171,10 +193,23 @@ export default function AreaChart() {
               <RotateCcw className="w-4 h-4 mr-2" />
               Reset
             </Button>
-            <Button onClick={handleExport} data-testid="button-export">
-              <Download className="w-4 h-4 mr-2" />
-              Export PNG
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button disabled={isExporting} data-testid="button-export">
+                  <Download className="w-4 h-4 mr-2" />
+                  {isExporting ? "Exporting..." : "Export"}
+                  <ChevronDown className="w-4 h-4 ml-2" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onClick={() => exportChart("png")} data-testid="export-png">
+                  Export as PNG
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => exportChart("svg")} data-testid="export-svg">
+                  Export as SVG
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
 
