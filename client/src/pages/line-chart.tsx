@@ -526,10 +526,10 @@ export default function LineChart() {
                   </div>
                 </div>
 
-                <div className="flex">
+                <div className="flex" style={{ minHeight: `${chartHeight + 40}px` }}>
                   <div 
-                    className="flex flex-col justify-between pr-2 text-right"
-                    style={{ height: `${chartHeight}px`, paddingTop: `${padding.top}px`, paddingBottom: `${padding.bottom}px` }}
+                    className="flex flex-col justify-between pr-3 text-right shrink-0"
+                    style={{ height: `${chartHeight}px`, paddingTop: `${padding.top}px`, paddingBottom: `${padding.bottom}px`, minWidth: '35px' }}
                   >
                     {[...yAxisTicks].reverse().map((tick) => (
                       <span
@@ -546,12 +546,13 @@ export default function LineChart() {
                     ))}
                   </div>
 
-                  <div className="flex-1">
+                  <div className="flex-1" style={{ minWidth: '500px' }}>
                     <svg 
                       width="100%" 
                       height={chartHeight} 
                       viewBox={`0 0 ${chartWidth} ${chartHeight}`}
                       preserveAspectRatio="xMidYMid meet"
+                      style={{ overflow: 'visible' }}
                     >
                       {yAxisTicks.map((tick) => (
                         <line
