@@ -8,6 +8,7 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import SingleBarChart from "@/pages/single-bar-chart";
 import LineChart from "@/pages/line-chart";
+import AreaChart from "@/pages/area-chart";
 
 function Navigation() {
   const [location] = useLocation();
@@ -42,6 +43,15 @@ function Navigation() {
             Line Chart
           </Button>
         </Link>
+        <Link href="/area">
+          <Button
+            variant={location === "/area" ? "default" : "ghost"}
+            size="sm"
+            data-testid="nav-area"
+          >
+            Area Chart
+          </Button>
+        </Link>
       </div>
     </nav>
   );
@@ -53,6 +63,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/single" component={SingleBarChart} />
       <Route path="/line" component={LineChart} />
+      <Route path="/area" component={AreaChart} />
       <Route component={NotFound} />
     </Switch>
   );
