@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Download, Plus, Trash2, RotateCcw } from "lucide-react";
-import testdinoLogo from "@assets/image_1768935263598.png";
+import testdinoLogo from "@assets/image_1769153159547.png";
 
 function hexToHsl(hex: string): { h: number; s: number; l: number } {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);

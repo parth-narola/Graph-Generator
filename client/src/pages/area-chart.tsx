@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Download, Plus, Trash2, RotateCcw } from "lucide-react";
 import { toPng } from "html-to-image";
 import { useToast } from "@/hooks/use-toast";
-import testDinoLogo from "@assets/image_1768935263598.png";
+import testDinoLogo from "@assets/image_1769153159547.png";
 
 interface DataPoint {
   label: string;
@@ -205,22 +205,12 @@ export default function AreaChart() {
                           </h2>
                         ))}
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center">
                         <img
                           src={testDinoLogo}
                           alt="TestDino"
                           style={{ height: "32px", width: "auto" }}
                         />
-                        <span
-                          style={{
-                            fontFamily: "'Geist', sans-serif",
-                            fontSize: "18px",
-                            fontWeight: "bold",
-                            color: config.textColor,
-                          }}
-                        >
-                          TestDino
-                        </span>
                       </div>
                     </div>
 

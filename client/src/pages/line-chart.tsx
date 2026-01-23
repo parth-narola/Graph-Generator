@@ -8,7 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Switch } from "@/components/ui/switch";
 import { Download, Plus, Trash2, RotateCcw } from "lucide-react";
-import testdinoLogo from "@assets/image_1768935263598.png";
+import testdinoLogo from "@assets/image_1769153159547.png";
 
 function hexToHsl(hex: string): { h: number; s: number; l: number } {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -511,18 +511,12 @@ export default function LineChart() {
                   >
                     {config.title}
                   </h2>
-                  <div className="flex items-center gap-2 shrink-0">
+                  <div className="flex items-center shrink-0">
                     <img
                       src={testdinoLogo}
                       alt="TestDino"
-                      className="h-6 w-auto"
+                      className="h-8 w-auto"
                     />
-                    <span
-                      className="text-lg font-semibold"
-                      style={{ color: config.textColor, fontFamily: "'Geist', sans-serif" }}
-                    >
-                      TestDino
-                    </span>
                   </div>
                 </div>
 
