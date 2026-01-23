@@ -656,16 +656,16 @@ export default function LineChart() {
                         const boxHeight = 30 + annotationLines.length * 14;
                         const isAbove = index % 2 === 0;
                         const boxY = isAbove ? y - boxHeight - 20 : y + 20;
-                        const boxX = Math.max(5, Math.min(chartWidth - boxWidth - 5, x - boxWidth / 2));
+                        const boxX = x - boxWidth / 2;
                         
-                        const connectorX = x;
+                        const boxCenterX = boxX + boxWidth / 2;
                         
                         return (
                           <g key={`annotation-${dp.id}`}>
                             <line
-                              x1={connectorX}
+                              x1={x}
                               y1={y + (isAbove ? -config.pointSize/2 - 4 : config.pointSize/2 + 4)}
-                              x2={connectorX}
+                              x2={boxCenterX}
                               y2={isAbove ? boxY + boxHeight + 2 : boxY - 2}
                               stroke={config.textColor}
                               strokeOpacity={0.15}
