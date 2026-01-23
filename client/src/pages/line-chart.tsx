@@ -560,8 +560,9 @@ export default function LineChart() {
                           x2={chartWidth - padding.right}
                           y2={padding.top + plotHeight - (tick / yAxisMax) * plotHeight}
                           stroke={config.textColor}
-                          strokeOpacity={tick === 0 ? 0.3 : 0.1}
+                          strokeOpacity={tick === 0 ? 0.4 : 0.25}
                           strokeWidth={1}
+                          strokeDasharray={tick === 0 ? "none" : "4 4"}
                         />
                       ))}
 
@@ -598,8 +599,14 @@ export default function LineChart() {
 
                       {config.showAnnotations && config.dataPoints.map((dp, index) => {
                         const { x, y } = getPointPosition(index, dp.value);
-                        const boxWidth = 90;
-                        const boxHeight = 45;
+                        const annotationLines = dp.annotation.split('\n').length > 1 
+                          ? dp.annotation.split('\n') 
+                          : dp.annotation.length > 15 
+                            ? [dp.annotation.slice(0, Math.ceil(dp.annotation.length / 2)), dp.annotation.slice(Math.ceil(dp.annotation.length / 2))]
+                            : [dp.annotation];
+                        const maxLineLength = Math.max(...annotationLines.map(l => l.length), String(dp.value).length);
+                        const boxWidth = Math.max(70, maxLineLength * 7 + 20);
+                        const boxHeight = 28 + annotationLines.length * 14;
                         const isAbove = index % 2 === 0;
                         const boxY = isAbove ? y - boxHeight - 15 : y + 15;
                         const boxX = x - boxWidth / 2;
@@ -637,16 +644,19 @@ export default function LineChart() {
                             >
                               {dp.value}
                             </text>
-                            <text
-                              x={x}
-                              y={boxY + 35}
-                              textAnchor="middle"
-                              fill={config.annotationTextColor}
-                              fontFamily="'Geist Mono', monospace"
-                              fontSize={10}
-                            >
-                              {dp.annotation.length > 12 ? dp.annotation.slice(0, 12) + '...' : dp.annotation}
-                            </text>
+                            {annotationLines.map((line, lineIndex) => (
+                              <text
+                                key={lineIndex}
+                                x={x}
+                                y={boxY + 32 + lineIndex * 12}
+                                textAnchor="middle"
+                                fill={config.annotationTextColor}
+                                fontFamily="'Geist Mono', monospace"
+                                fontSize={10}
+                              >
+                                {line}
+                              </text>
+                            ))}
                           </g>
                         );
                       })}
