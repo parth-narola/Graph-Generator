@@ -525,7 +525,7 @@ export default function SingleBarChart() {
                         />
                       ))}
 
-                      <div className="flex items-end justify-around h-full px-4 pb-2">
+                      <div className="flex items-end justify-around h-full px-4">
                         {config.dataPoints.map((dp) => {
                           const barHeight = (dp.value / yAxisMax) * 250;
                           const barColor = getBarColor(dp);
@@ -534,6 +534,7 @@ export default function SingleBarChart() {
                             <div
                               key={dp.id}
                               className="flex flex-col items-center"
+                              style={{ width: "60px" }}
                             >
                               <div
                                 className="text-sm font-bold mb-1"
@@ -545,7 +546,7 @@ export default function SingleBarChart() {
                                 {dp.value}{config.valueFormat}
                               </div>
                               <div
-                                className="w-14 rounded-md transition-all duration-300"
+                                className="w-14 rounded-md transition-all duration-300 mb-2"
                                 style={{
                                   height: `${barHeight}px`,
                                   backgroundColor: barColor,
@@ -558,11 +559,12 @@ export default function SingleBarChart() {
                       </div>
                     </div>
 
-                    <div className="flex justify-around mt-3">
+                    <div className="flex justify-around px-4">
                       {config.dataPoints.map((dp) => (
                         <div
                           key={dp.id}
                           className="flex flex-col items-center"
+                          style={{ width: "60px" }}
                         >
                           <div 
                             className="w-px h-3"
