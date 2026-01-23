@@ -473,14 +473,14 @@ export default function SingleBarChart() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 mb-6">
+                <div className="flex items-center gap-2 mb-8">
                   <div
                     className="w-4 h-4 rounded-full"
                     style={{ backgroundColor: config.colorMode === "uniform" ? config.uniformColor : config.dataPoints[0]?.color || "#e8a5d0" }}
                   />
                   <span
                     className="text-sm"
-                    style={{ color: config.textColor, fontFamily: "'Geist', sans-serif" }}
+                    style={{ color: config.textColor, fontFamily: "'Geist Mono', monospace" }}
                   >
                     {config.legendLabel}
                   </span>
@@ -525,9 +525,9 @@ export default function SingleBarChart() {
                         />
                       ))}
 
-                      <div className="flex items-end justify-around h-full px-4">
+                      <div className="flex items-end justify-around h-full px-4 pb-2">
                         {config.dataPoints.map((dp) => {
-                          const barHeight = (dp.value / yAxisMax) * 260;
+                          const barHeight = (dp.value / yAxisMax) * 250;
                           const barColor = getBarColor(dp);
                           
                           return (
@@ -536,7 +536,7 @@ export default function SingleBarChart() {
                               className="flex flex-col items-center"
                             >
                               <div
-                                className="text-sm mb-1"
+                                className="text-sm font-bold mb-1"
                                 style={{ 
                                   color: config.textColor, 
                                   fontFamily: "'Geist Mono', monospace" 
@@ -570,7 +570,7 @@ export default function SingleBarChart() {
                           />
                           <div
                             className="text-sm text-center mt-2"
-                            style={{ color: config.textColor, fontFamily: "'Geist', sans-serif" }}
+                            style={{ color: config.textColor, fontFamily: "'Geist Mono', monospace" }}
                           >
                             {dp.label}
                           </div>
