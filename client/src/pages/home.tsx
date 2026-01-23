@@ -485,14 +485,22 @@ export default function Home() {
                     style={{ backgroundColor: config.textColor, opacity: 0.3 }}
                   />
                   
-                  <div className="flex justify-between gap-4 mt-3">
+                  <div className="flex justify-between gap-4">
                     {config.dataPoints.map((dp) => (
                       <div
                         key={dp.id}
-                        className="flex-1 text-sm text-center"
-                        style={{ color: config.textColor, fontFamily: "'Geist', sans-serif" }}
+                        className="flex-1 flex flex-col items-center"
                       >
-                        {dp.label}
+                        <div 
+                          className="w-px h-3"
+                          style={{ backgroundColor: config.textColor, opacity: 0.3 }}
+                        />
+                        <div
+                          className="text-sm text-center mt-2"
+                          style={{ color: config.textColor, fontFamily: "'Geist', sans-serif" }}
+                        >
+                          {dp.label}
+                        </div>
                       </div>
                     ))}
                   </div>
