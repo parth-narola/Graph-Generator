@@ -141,6 +141,7 @@ export default function Home() {
         quality: 1,
         pixelRatio: 2,
         backgroundColor: config.backgroundColor,
+        skipFonts: true,
       });
       
       const link = document.createElement("a");

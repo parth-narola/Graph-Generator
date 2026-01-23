@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import SingleBarChart from "@/pages/single-bar-chart";
+import LineChart from "@/pages/line-chart";
 
 function Navigation() {
   const [location] = useLocation();
@@ -32,6 +33,15 @@ function Navigation() {
             Single Bar Chart
           </Button>
         </Link>
+        <Link href="/line">
+          <Button
+            variant={location === "/line" ? "default" : "ghost"}
+            size="sm"
+            data-testid="nav-line"
+          >
+            Line Chart
+          </Button>
+        </Link>
       </div>
     </nav>
   );
@@ -42,6 +52,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/single" component={SingleBarChart} />
+      <Route path="/line" component={LineChart} />
       <Route component={NotFound} />
     </Switch>
   );
