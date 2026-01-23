@@ -644,7 +644,7 @@ export default function LineChart() {
                               strokeWidth={1}
                             />
                             <text
-                              x={x}
+                              x={boxX + boxWidth / 2}
                               y={boxY + 18}
                               textAnchor="middle"
                               fill={config.lineColor}
@@ -657,7 +657,7 @@ export default function LineChart() {
                             {annotationLines.map((line, lineIndex) => (
                               <text
                                 key={lineIndex}
-                                x={x}
+                                x={boxX + boxWidth / 2}
                                 y={boxY + 32 + lineIndex * 12}
                                 textAnchor="middle"
                                 fill={config.annotationTextColor}
