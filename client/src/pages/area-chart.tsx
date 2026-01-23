@@ -27,6 +27,7 @@ interface ChartConfig {
   fillColor: string;
   pointColor: string;
   backgroundColor: string;
+  borderColor: string;
   textColor: string;
   labelColor: string;
   gridColor: string;
@@ -58,6 +59,7 @@ const defaultConfig: ChartConfig = {
   fillColor: "#22c55e",
   pointColor: "#22c55e",
   backgroundColor: "#ffffff",
+  borderColor: "#e0e0e0",
   textColor: "#1a1a2e",
   labelColor: "#374151",
   gridColor: "#e5e7eb",
@@ -345,6 +347,23 @@ export default function AreaChart() {
                           />
                         </div>
                       </div>
+                      <div className="space-y-1">
+                        <Label className="text-xs">Border Color</Label>
+                        <div className="flex gap-1">
+                          <input
+                            type="color"
+                            value={config.borderColor}
+                            onChange={(e) => setConfig({ ...config, borderColor: e.target.value })}
+                            className="w-10 h-8 rounded cursor-pointer"
+                            data-testid="color-border"
+                          />
+                          <Input
+                            value={config.borderColor}
+                            onChange={(e) => setConfig({ ...config, borderColor: e.target.value })}
+                            className="flex-1 h-8 text-xs"
+                          />
+                        </div>
+                      </div>
                     </div>
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1">
@@ -485,31 +504,21 @@ export default function AreaChart() {
                   className="rounded-lg p-8 min-w-[600px]"
                   style={{
                     backgroundColor: config.backgroundColor,
+                    border: `1px solid ${config.borderColor}`,
                   }}
                 >
-                    <div className="flex justify-between items-start mb-4">
-                      <div style={{ maxWidth: "70%" }}>
-                        {config.title.split("\n").map((line, i) => (
-                          <h2
-                            key={i}
-                            style={{
-                              color: config.textColor,
-                              fontFamily: "'Geist', sans-serif",
-                              fontSize: i === 0 ? "28px" : "24px",
-                              fontWeight: "bold",
-                              margin: 0,
-                              lineHeight: 1.2,
-                            }}
-                          >
-                            {line}
-                          </h2>
-                        ))}
-                      </div>
-                      <div className="flex items-center">
+                    <div className="flex items-start justify-between mb-2">
+                      <h2
+                        className="text-xl font-bold flex-1 pr-4"
+                        style={{ color: config.textColor, fontFamily: "'Geist', sans-serif" }}
+                      >
+                        {config.title.split("\n").join(" ")}
+                      </h2>
+                      <div className="flex items-center shrink-0">
                         <img
                           src={testDinoLogo}
                           alt="TestDino"
-                          style={{ height: "32px", width: "auto" }}
+                          className="h-8 w-auto"
                         />
                       </div>
                     </div>
