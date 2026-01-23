@@ -189,155 +189,135 @@ export default function Home() {
               <CardTitle style={{ fontFamily: "'Geist', sans-serif" }}>Configuration</CardTitle>
             </CardHeader>
             <CardContent>
-              <ScrollArea className="h-[calc(100vh-280px)] pr-4">
-                <div className="space-y-6">
-                  <div className="space-y-4">
-                    <h3 className="font-medium text-sm text-muted-foreground uppercase tracking-wide">
-                      Text Content
-                    </h3>
-                    <div className="space-y-3">
-                      <div>
-                        <Label htmlFor="title">Chart Title</Label>
-                        <Input
-                          id="title"
-                          value={config.title}
-                          onChange={e => updateConfig("title", e.target.value)}
-                          className="mt-1.5"
-                          data-testid="input-title"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="xAxisLabel">X-Axis Label</Label>
-                        <Input
-                          id="xAxisLabel"
-                          value={config.xAxisLabel}
-                          onChange={e => updateConfig("xAxisLabel", e.target.value)}
-                          className="mt-1.5"
-                          data-testid="input-x-axis"
-                        />
-                      </div>
-                      <div className="grid grid-cols-2 gap-3">
-                        <div>
-                          <Label htmlFor="legend1">Legend 1</Label>
-                          <Input
-                            id="legend1"
-                            value={config.legend1}
-                            onChange={e => updateConfig("legend1", e.target.value)}
-                            className="mt-1.5"
-                            data-testid="input-legend1"
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="legend2">Legend 2</Label>
-                          <Input
-                            id="legend2"
-                            value={config.legend2}
-                            onChange={e => updateConfig("legend2", e.target.value)}
-                            className="mt-1.5"
-                            data-testid="input-legend2"
-                          />
-                        </div>
-                      </div>
+              <ScrollArea className="h-[calc(100vh-220px)]">
+                <div className="space-y-6 pr-4">
+                  <div className="space-y-2">
+                    <Label>Chart Title</Label>
+                    <Input
+                      value={config.title}
+                      onChange={e => updateConfig("title", e.target.value)}
+                      data-testid="input-title"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>X-Axis Label</Label>
+                    <Input
+                      value={config.xAxisLabel}
+                      onChange={e => updateConfig("xAxisLabel", e.target.value)}
+                      data-testid="input-x-axis"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <Label>Legend 1</Label>
+                      <Input
+                        value={config.legend1}
+                        onChange={e => updateConfig("legend1", e.target.value)}
+                        data-testid="input-legend1"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Legend 2</Label>
+                      <Input
+                        value={config.legend2}
+                        onChange={e => updateConfig("legend2", e.target.value)}
+                        data-testid="input-legend2"
+                      />
                     </div>
                   </div>
 
                   <Separator />
 
-                  <div className="space-y-4">
-                    <h3 className="font-medium text-sm text-muted-foreground uppercase tracking-wide">
-                      Colors
-                    </h3>
+                  <div className="space-y-3">
+                    <Label className="text-sm font-medium">Colors</Label>
                     <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <Label htmlFor="bar1Color">Bar 1 Color</Label>
-                        <div className="flex items-center gap-2 mt-1.5">
+                      <div className="space-y-1">
+                        <Label className="text-xs">Bar 1 Color</Label>
+                        <div className="flex gap-1">
                           <input
                             type="color"
-                            id="bar1Color"
                             value={config.bar1Color}
                             onChange={e => updateConfig("bar1Color", e.target.value)}
-                            className="w-10 h-9 rounded-md border cursor-pointer"
+                            className="w-10 h-8 rounded cursor-pointer"
                             data-testid="input-bar1-color"
                           />
                           <Input
                             value={config.bar1Color}
                             onChange={e => updateConfig("bar1Color", e.target.value)}
-                            className="flex-1"
+                            className="flex-1 h-8 text-xs"
                           />
                         </div>
                       </div>
-                      <div>
-                        <Label htmlFor="bar2Color">Bar 2 Color</Label>
-                        <div className="flex items-center gap-2 mt-1.5">
+                      <div className="space-y-1">
+                        <Label className="text-xs">Bar 2 Color</Label>
+                        <div className="flex gap-1">
                           <input
                             type="color"
-                            id="bar2Color"
                             value={config.bar2Color}
                             onChange={e => updateConfig("bar2Color", e.target.value)}
-                            className="w-10 h-9 rounded-md border cursor-pointer"
+                            className="w-10 h-8 rounded cursor-pointer"
                             data-testid="input-bar2-color"
                           />
                           <Input
                             value={config.bar2Color}
                             onChange={e => updateConfig("bar2Color", e.target.value)}
-                            className="flex-1"
+                            className="flex-1 h-8 text-xs"
                           />
                         </div>
                       </div>
                     </div>
                     <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <Label htmlFor="backgroundColor">Background</Label>
-                        <div className="flex items-center gap-2 mt-1.5">
+                      <div className="space-y-1">
+                        <Label className="text-xs">Background</Label>
+                        <div className="flex gap-1">
                           <input
                             type="color"
-                            id="backgroundColor"
                             value={config.backgroundColor}
                             onChange={e => updateConfig("backgroundColor", e.target.value)}
-                            className="w-10 h-9 rounded-md border cursor-pointer"
+                            className="w-10 h-8 rounded cursor-pointer"
                             data-testid="input-bg-color"
                           />
                           <Input
                             value={config.backgroundColor}
                             onChange={e => updateConfig("backgroundColor", e.target.value)}
-                            className="flex-1"
+                            className="flex-1 h-8 text-xs"
                           />
                         </div>
                       </div>
-                      <div>
-                        <Label htmlFor="borderColor">Border</Label>
-                        <div className="flex items-center gap-2 mt-1.5">
+                      <div className="space-y-1">
+                        <Label className="text-xs">Border</Label>
+                        <div className="flex gap-1">
                           <input
                             type="color"
-                            id="borderColor"
                             value={config.borderColor}
                             onChange={e => updateConfig("borderColor", e.target.value)}
-                            className="w-10 h-9 rounded-md border cursor-pointer"
+                            className="w-10 h-8 rounded cursor-pointer"
                             data-testid="input-border-color"
                           />
                           <Input
                             value={config.borderColor}
                             onChange={e => updateConfig("borderColor", e.target.value)}
-                            className="flex-1"
+                            className="flex-1 h-8 text-xs"
                           />
                         </div>
                       </div>
                     </div>
-                    <div>
-                      <Label htmlFor="textColor">Text Color</Label>
-                      <div className="flex items-center gap-2 mt-1.5">
+                    <div className="space-y-1">
+                      <Label className="text-xs">Text Color</Label>
+                      <div className="flex gap-1">
                         <input
                           type="color"
-                          id="textColor"
                           value={config.textColor}
                           onChange={e => updateConfig("textColor", e.target.value)}
-                          className="w-10 h-9 rounded-md border cursor-pointer"
+                          className="w-10 h-8 rounded cursor-pointer"
                           data-testid="input-text-color"
                         />
                         <Input
                           value={config.textColor}
                           onChange={e => updateConfig("textColor", e.target.value)}
-                          className="flex-1"
+                          className="flex-1 h-8 text-xs"
                         />
                       </div>
                     </div>
@@ -345,86 +325,84 @@ export default function Home() {
 
                   <Separator />
 
-                  <div className="space-y-4">
-                    <h3 className="font-medium text-sm text-muted-foreground uppercase tracking-wide">
-                      Options
-                    </h3>
-                    <div className="flex items-center gap-3">
-                      <input
-                        type="checkbox"
-                        id="showPercentage"
-                        checked={config.showPercentageChange}
-                        onChange={e => updateConfig("showPercentageChange", e.target.checked)}
-                        className="w-4 h-4 rounded border-border"
-                        data-testid="checkbox-percentage"
-                      />
-                      <Label htmlFor="showPercentage" className="cursor-pointer">
-                        Show percentage change labels
-                      </Label>
-                    </div>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="checkbox"
+                      id="showPercentage"
+                      checked={config.showPercentageChange}
+                      onChange={e => updateConfig("showPercentageChange", e.target.checked)}
+                      className="w-4 h-4 rounded border-border"
+                      data-testid="checkbox-percentage"
+                    />
+                    <Label htmlFor="showPercentage" className="cursor-pointer">
+                      Show percentage change labels
+                    </Label>
                   </div>
 
                   <Separator />
 
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between gap-2">
-                      <h3 className="font-medium text-sm text-muted-foreground uppercase tracking-wide">
-                        Data Points
-                      </h3>
-                      <Button variant="outline" size="sm" onClick={addDataPoint} data-testid="button-add-data">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <Label>Data Points</Label>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={addDataPoint}
+                        data-testid="button-add-data"
+                      >
                         <Plus className="w-4 h-4 mr-1" />
                         Add
                       </Button>
                     </div>
                     <div className="space-y-3">
                       {config.dataPoints.map((dp, index) => (
-                        <div key={dp.id} className="p-3 bg-muted/50 rounded-md space-y-2">
-                          <div className="flex items-center justify-between gap-2">
-                            <span className="text-sm font-medium">Point {index + 1}</span>
-                            {config.dataPoints.length > 1 && (
+                        <Card key={dp.id} className="p-3">
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm font-medium">Point {index + 1}</span>
                               <Button
-                                variant="ghost"
                                 size="icon"
+                                variant="ghost"
                                 onClick={() => removeDataPoint(dp.id)}
-                                className="h-7 w-7"
+                                disabled={config.dataPoints.length <= 1}
                                 data-testid={`button-remove-data-${index}`}
                               >
                                 <Trash2 className="w-4 h-4" />
                               </Button>
-                            )}
-                          </div>
-                          <div>
-                            <Label className="text-xs">Label</Label>
-                            <Input
-                              value={dp.label}
-                              onChange={e => updateDataPoint(dp.id, "label", e.target.value)}
-                              className="mt-1 h-8"
-                              data-testid={`input-label-${index}`}
-                            />
-                          </div>
-                          <div className="grid grid-cols-2 gap-2">
-                            <div>
-                              <Label className="text-xs">Value 1</Label>
-                              <Input
-                                type="number"
-                                value={dp.value1}
-                                onChange={e => updateDataPoint(dp.id, "value1", Number(e.target.value))}
-                                className="mt-1 h-8"
-                                data-testid={`input-value1-${index}`}
-                              />
                             </div>
                             <div>
-                              <Label className="text-xs">Value 2</Label>
+                              <Label className="text-xs">Label</Label>
                               <Input
-                                type="number"
-                                value={dp.value2}
-                                onChange={e => updateDataPoint(dp.id, "value2", Number(e.target.value))}
-                                className="mt-1 h-8"
-                                data-testid={`input-value2-${index}`}
+                                value={dp.label}
+                                onChange={e => updateDataPoint(dp.id, "label", e.target.value)}
+                                className="h-8"
+                                data-testid={`input-label-${index}`}
                               />
                             </div>
+                            <div className="grid grid-cols-2 gap-2">
+                              <div>
+                                <Label className="text-xs">Value 1</Label>
+                                <Input
+                                  type="number"
+                                  value={dp.value1}
+                                  onChange={e => updateDataPoint(dp.id, "value1", Number(e.target.value))}
+                                  className="h-8"
+                                  data-testid={`input-value1-${index}`}
+                                />
+                              </div>
+                              <div>
+                                <Label className="text-xs">Value 2</Label>
+                                <Input
+                                  type="number"
+                                  value={dp.value2}
+                                  onChange={e => updateDataPoint(dp.id, "value2", Number(e.target.value))}
+                                  className="h-8"
+                                  data-testid={`input-value2-${index}`}
+                                />
+                              </div>
+                            </div>
                           </div>
-                        </div>
+                        </Card>
                       ))}
                     </div>
                   </div>

@@ -215,9 +215,8 @@ export default function SingleBarChart() {
               <ScrollArea className="h-[calc(100vh-220px)]">
                 <div className="space-y-6 pr-4">
                   <div className="space-y-2">
-                    <Label htmlFor="title">Chart Title</Label>
+                    <Label>Chart Title</Label>
                     <Input
-                      id="title"
                       value={config.title}
                       onChange={(e) => updateConfig("title", e.target.value)}
                       data-testid="input-title"
@@ -225,39 +224,37 @@ export default function SingleBarChart() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="legendLabel">Legend Label</Label>
+                    <Label>Legend Label</Label>
                     <Input
-                      id="legendLabel"
                       value={config.legendLabel}
                       onChange={(e) => updateConfig("legendLabel", e.target.value)}
                       data-testid="input-legend"
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="yAxisLabel">Y-Axis Label</Label>
-                    <Input
-                      id="yAxisLabel"
-                      value={config.yAxisLabel}
-                      onChange={(e) => updateConfig("yAxisLabel", e.target.value)}
-                      data-testid="input-yaxis"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="valueFormat">Value Format Suffix</Label>
-                    <Input
-                      id="valueFormat"
-                      value={config.valueFormat}
-                      onChange={(e) => updateConfig("valueFormat", e.target.value)}
-                      placeholder="e.g., K, B, %"
-                      data-testid="input-format"
-                    />
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <Label>Y-Axis Label</Label>
+                      <Input
+                        value={config.yAxisLabel}
+                        onChange={(e) => updateConfig("yAxisLabel", e.target.value)}
+                        data-testid="input-yaxis"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Value Suffix</Label>
+                      <Input
+                        value={config.valueFormat}
+                        onChange={(e) => updateConfig("valueFormat", e.target.value)}
+                        placeholder="e.g., K, B, %"
+                        data-testid="input-format"
+                      />
+                    </div>
                   </div>
 
                   <Separator />
 
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     <Label>Bar Color Mode</Label>
                     <RadioGroup
                       value={config.colorMode}
@@ -276,21 +273,20 @@ export default function SingleBarChart() {
                   </div>
 
                   {config.colorMode === "uniform" && (
-                    <div className="space-y-2">
-                      <Label htmlFor="uniformColor">Bar Color</Label>
-                      <div className="flex gap-2">
-                        <Input
+                    <div className="space-y-1">
+                      <Label className="text-xs">Bar Color</Label>
+                      <div className="flex gap-1">
+                        <input
                           type="color"
-                          id="uniformColor"
                           value={config.uniformColor}
                           onChange={(e) => updateConfig("uniformColor", e.target.value)}
-                          className="w-12 h-10 p-1 cursor-pointer"
+                          className="w-10 h-8 rounded cursor-pointer"
                           data-testid="input-uniform-color"
                         />
                         <Input
                           value={config.uniformColor}
                           onChange={(e) => updateConfig("uniformColor", e.target.value)}
-                          className="flex-1"
+                          className="flex-1 h-8 text-xs"
                           data-testid="input-uniform-color-hex"
                         />
                       </div>
@@ -299,17 +295,17 @@ export default function SingleBarChart() {
 
                   <Separator />
 
-                  <div className="space-y-2">
-                    <Label>Background & Text Colors</Label>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div>
-                        <Label className="text-xs text-muted-foreground">Background</Label>
+                  <div className="space-y-3">
+                    <Label className="text-sm font-medium">Colors</Label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <Label className="text-xs">Background</Label>
                         <div className="flex gap-1">
-                          <Input
+                          <input
                             type="color"
                             value={config.backgroundColor}
                             onChange={(e) => updateConfig("backgroundColor", e.target.value)}
-                            className="w-10 h-8 p-1 cursor-pointer"
+                            className="w-10 h-8 rounded cursor-pointer"
                             data-testid="input-bg-color"
                           />
                           <Input
@@ -319,14 +315,14 @@ export default function SingleBarChart() {
                           />
                         </div>
                       </div>
-                      <div>
-                        <Label className="text-xs text-muted-foreground">Border</Label>
+                      <div className="space-y-1">
+                        <Label className="text-xs">Border</Label>
                         <div className="flex gap-1">
-                          <Input
+                          <input
                             type="color"
                             value={config.borderColor}
                             onChange={(e) => updateConfig("borderColor", e.target.value)}
-                            className="w-10 h-8 p-1 cursor-pointer"
+                            className="w-10 h-8 rounded cursor-pointer"
                             data-testid="input-border-color"
                           />
                           <Input
@@ -336,22 +332,22 @@ export default function SingleBarChart() {
                           />
                         </div>
                       </div>
-                      <div className="col-span-2">
-                        <Label className="text-xs text-muted-foreground">Text Color</Label>
-                        <div className="flex gap-1">
-                          <Input
-                            type="color"
-                            value={config.textColor}
-                            onChange={(e) => updateConfig("textColor", e.target.value)}
-                            className="w-10 h-8 p-1 cursor-pointer"
-                            data-testid="input-text-color"
-                          />
-                          <Input
-                            value={config.textColor}
-                            onChange={(e) => updateConfig("textColor", e.target.value)}
-                            className="flex-1 h-8 text-xs"
-                          />
-                        </div>
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-xs">Text Color</Label>
+                      <div className="flex gap-1">
+                        <input
+                          type="color"
+                          value={config.textColor}
+                          onChange={(e) => updateConfig("textColor", e.target.value)}
+                          className="w-10 h-8 rounded cursor-pointer"
+                          data-testid="input-text-color"
+                        />
+                        <Input
+                          value={config.textColor}
+                          onChange={(e) => updateConfig("textColor", e.target.value)}
+                          className="flex-1 h-8 text-xs"
+                        />
                       </div>
                     </div>
                   </div>

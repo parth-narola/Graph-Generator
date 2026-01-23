@@ -225,28 +225,52 @@ export default function LineChart() {
               <ScrollArea className="h-[calc(100vh-220px)]">
                 <div className="space-y-6 pr-4">
                   <div className="space-y-2">
-                    <Label htmlFor="title">Chart Title</Label>
+                    <Label>Chart Title</Label>
                     <Input
-                      id="title"
                       value={config.title}
                       onChange={(e) => updateConfig("title", e.target.value)}
                       data-testid="input-title"
                     />
                   </div>
 
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <Label>Line Width</Label>
+                      <Input
+                        type="number"
+                        value={config.lineWidth}
+                        onChange={(e) => updateConfig("lineWidth", parseInt(e.target.value) || 2)}
+                        min={1}
+                        max={10}
+                        data-testid="input-line-width"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Point Size</Label>
+                      <Input
+                        type="number"
+                        value={config.pointSize}
+                        onChange={(e) => updateConfig("pointSize", parseInt(e.target.value) || 8)}
+                        min={4}
+                        max={20}
+                        data-testid="input-point-size"
+                      />
+                    </div>
+                  </div>
+
                   <Separator />
 
                   <div className="space-y-3">
-                    <Label>Line & Point Colors</Label>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div>
-                        <Label className="text-xs text-muted-foreground">Line Color</Label>
+                    <Label className="text-sm font-medium">Colors</Label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <Label className="text-xs">Line Color</Label>
                         <div className="flex gap-1">
-                          <Input
+                          <input
                             type="color"
                             value={config.lineColor}
                             onChange={(e) => updateConfig("lineColor", e.target.value)}
-                            className="w-10 h-8 p-1 cursor-pointer"
+                            className="w-10 h-8 rounded cursor-pointer"
                             data-testid="input-line-color"
                           />
                           <Input
@@ -256,14 +280,14 @@ export default function LineChart() {
                           />
                         </div>
                       </div>
-                      <div>
-                        <Label className="text-xs text-muted-foreground">Point Color</Label>
+                      <div className="space-y-1">
+                        <Label className="text-xs">Point Color</Label>
                         <div className="flex gap-1">
-                          <Input
+                          <input
                             type="color"
                             value={config.pointColor}
                             onChange={(e) => updateConfig("pointColor", e.target.value)}
-                            className="w-10 h-8 p-1 cursor-pointer"
+                            className="w-10 h-8 rounded cursor-pointer"
                             data-testid="input-point-color"
                           />
                           <Input
@@ -274,32 +298,58 @@ export default function LineChart() {
                         </div>
                       </div>
                     </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2">
-                    <div>
-                      <Label className="text-xs text-muted-foreground">Line Width</Label>
-                      <Input
-                        type="number"
-                        value={config.lineWidth}
-                        onChange={(e) => updateConfig("lineWidth", parseInt(e.target.value) || 2)}
-                        min={1}
-                        max={10}
-                        className="h-8"
-                        data-testid="input-line-width"
-                      />
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <Label className="text-xs">Background</Label>
+                        <div className="flex gap-1">
+                          <input
+                            type="color"
+                            value={config.backgroundColor}
+                            onChange={(e) => updateConfig("backgroundColor", e.target.value)}
+                            className="w-10 h-8 rounded cursor-pointer"
+                            data-testid="input-bg-color"
+                          />
+                          <Input
+                            value={config.backgroundColor}
+                            onChange={(e) => updateConfig("backgroundColor", e.target.value)}
+                            className="flex-1 h-8 text-xs"
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-xs">Border</Label>
+                        <div className="flex gap-1">
+                          <input
+                            type="color"
+                            value={config.borderColor}
+                            onChange={(e) => updateConfig("borderColor", e.target.value)}
+                            className="w-10 h-8 rounded cursor-pointer"
+                            data-testid="input-border-color"
+                          />
+                          <Input
+                            value={config.borderColor}
+                            onChange={(e) => updateConfig("borderColor", e.target.value)}
+                            className="flex-1 h-8 text-xs"
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <Label className="text-xs text-muted-foreground">Point Size</Label>
-                      <Input
-                        type="number"
-                        value={config.pointSize}
-                        onChange={(e) => updateConfig("pointSize", parseInt(e.target.value) || 8)}
-                        min={4}
-                        max={20}
-                        className="h-8"
-                        data-testid="input-point-size"
-                      />
+                    <div className="space-y-1">
+                      <Label className="text-xs">Text Color</Label>
+                      <div className="flex gap-1">
+                        <input
+                          type="color"
+                          value={config.textColor}
+                          onChange={(e) => updateConfig("textColor", e.target.value)}
+                          className="w-10 h-8 rounded cursor-pointer"
+                          data-testid="input-text-color"
+                        />
+                        <Input
+                          value={config.textColor}
+                          onChange={(e) => updateConfig("textColor", e.target.value)}
+                          className="flex-1 h-8 text-xs"
+                        />
+                      </div>
                     </div>
                   </div>
 
@@ -316,15 +366,15 @@ export default function LineChart() {
                     </div>
                     
                     {config.showAnnotations && (
-                      <div className="grid grid-cols-2 gap-2">
-                        <div>
-                          <Label className="text-xs text-muted-foreground">Annotation BG</Label>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-1">
+                          <Label className="text-xs">Annotation BG</Label>
                           <div className="flex gap-1">
-                            <Input
+                            <input
                               type="color"
                               value={config.annotationBgColor}
                               onChange={(e) => updateConfig("annotationBgColor", e.target.value)}
-                              className="w-10 h-8 p-1 cursor-pointer"
+                              className="w-10 h-8 rounded cursor-pointer"
                               data-testid="input-annotation-bg"
                             />
                             <Input
@@ -334,14 +384,14 @@ export default function LineChart() {
                             />
                           </div>
                         </div>
-                        <div>
-                          <Label className="text-xs text-muted-foreground">Annotation Text</Label>
+                        <div className="space-y-1">
+                          <Label className="text-xs">Annotation Text</Label>
                           <div className="flex gap-1">
-                            <Input
+                            <input
                               type="color"
                               value={config.annotationTextColor}
                               onChange={(e) => updateConfig("annotationTextColor", e.target.value)}
-                              className="w-10 h-8 p-1 cursor-pointer"
+                              className="w-10 h-8 rounded cursor-pointer"
                               data-testid="input-annotation-text"
                             />
                             <Input
@@ -353,65 +403,6 @@ export default function LineChart() {
                         </div>
                       </div>
                     )}
-                  </div>
-
-                  <Separator />
-
-                  <div className="space-y-2">
-                    <Label>Background & Text Colors</Label>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div>
-                        <Label className="text-xs text-muted-foreground">Background</Label>
-                        <div className="flex gap-1">
-                          <Input
-                            type="color"
-                            value={config.backgroundColor}
-                            onChange={(e) => updateConfig("backgroundColor", e.target.value)}
-                            className="w-10 h-8 p-1 cursor-pointer"
-                            data-testid="input-bg-color"
-                          />
-                          <Input
-                            value={config.backgroundColor}
-                            onChange={(e) => updateConfig("backgroundColor", e.target.value)}
-                            className="flex-1 h-8 text-xs"
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <Label className="text-xs text-muted-foreground">Border</Label>
-                        <div className="flex gap-1">
-                          <Input
-                            type="color"
-                            value={config.borderColor}
-                            onChange={(e) => updateConfig("borderColor", e.target.value)}
-                            className="w-10 h-8 p-1 cursor-pointer"
-                            data-testid="input-border-color"
-                          />
-                          <Input
-                            value={config.borderColor}
-                            onChange={(e) => updateConfig("borderColor", e.target.value)}
-                            className="flex-1 h-8 text-xs"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-span-2">
-                        <Label className="text-xs text-muted-foreground">Text Color</Label>
-                        <div className="flex gap-1">
-                          <Input
-                            type="color"
-                            value={config.textColor}
-                            onChange={(e) => updateConfig("textColor", e.target.value)}
-                            className="w-10 h-8 p-1 cursor-pointer"
-                            data-testid="input-text-color"
-                          />
-                          <Input
-                            value={config.textColor}
-                            onChange={(e) => updateConfig("textColor", e.target.value)}
-                            className="flex-1 h-8 text-xs"
-                          />
-                        </div>
-                      </div>
-                    </div>
                   </div>
 
                   <Separator />
