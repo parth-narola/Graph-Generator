@@ -567,6 +567,26 @@ export default function LineChart() {
                 </div>
 
                 <div className="flex" style={{ minHeight: `${chartHeight + 40}px` }}>
+                  {config.yAxisLabel && (
+                    <div
+                      className="flex items-center justify-center shrink-0 mr-1"
+                      style={{ width: "20px", height: `${chartHeight}px` }}
+                    >
+                      <span
+                        style={{
+                          transform: "rotate(-90deg)",
+                          whiteSpace: "nowrap",
+                          color: config.textColor,
+                          fontFamily: "'Geist Mono', monospace",
+                          fontSize: "11px",
+                          fontStyle: "italic",
+                          opacity: 0.7,
+                        }}
+                      >
+                        {config.yAxisLabel}
+                      </span>
+                    </div>
+                  )}
                   <div 
                     className="flex flex-col justify-between pr-2 text-right shrink-0"
                     style={{ height: `${chartHeight}px`, paddingTop: `${padding.top}px`, paddingBottom: `${padding.bottom}px`, minWidth: '30px' }}
@@ -743,7 +763,7 @@ export default function LineChart() {
 
                 {config.xAxisLabel && (
                   <div
-                    className="text-center mt-2 text-sm"
+                    className="text-center mt-1 text-sm"
                     style={{ color: config.textColor, fontFamily: "'Geist', sans-serif", fontStyle: "italic", opacity: 0.8 }}
                   >
                     {config.xAxisLabel}

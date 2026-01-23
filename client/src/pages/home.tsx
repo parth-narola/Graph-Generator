@@ -529,8 +529,8 @@ export default function Home() {
                 </div>
 
                 <div
-                  className="text-center mt-8 text-base"
-                  style={{ color: config.textColor, fontFamily: "'Geist', sans-serif" }}
+                  className="text-center mt-2 text-sm"
+                  style={{ color: config.textColor, fontFamily: "'Geist', sans-serif", fontStyle: "italic" }}
                 >
                   {config.xAxisLabel}
                 </div>

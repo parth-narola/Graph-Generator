@@ -508,6 +508,26 @@ export default function SingleBarChart() {
                 </div>
 
                 <div className="flex">
+                  {config.yAxisLabel && (
+                    <div
+                      className="flex items-center justify-center shrink-0 mr-1"
+                      style={{ width: "20px", height: "280px" }}
+                    >
+                      <span
+                        style={{
+                          transform: "rotate(-90deg)",
+                          whiteSpace: "nowrap",
+                          color: config.textColor,
+                          fontFamily: "'Geist Mono', monospace",
+                          fontSize: "11px",
+                          fontStyle: "italic",
+                          opacity: 0.7,
+                        }}
+                      >
+                        {config.yAxisLabel}
+                      </span>
+                    </div>
+                  )}
                   <div 
                     className="flex flex-col justify-between pr-2 text-right"
                     style={{ height: "280px" }}
@@ -602,7 +622,7 @@ export default function SingleBarChart() {
 
                 {config.xAxisLabel && (
                   <div
-                    className="text-center mt-4 text-sm"
+                    className="text-center mt-1 text-sm"
                     style={{ color: config.textColor, fontFamily: "'Geist', sans-serif", fontStyle: "italic" }}
                   >
                     {config.xAxisLabel}
