@@ -66,6 +66,8 @@ interface SingleChartConfig {
   title: string;
   xAxisLabel: string;
   yAxisLabel: string;
+  yAxisMax: number;
+  yAxisStep: number;
   legendLabel: string;
   uniformColor: string;
   colorMode: "uniform" | "individual";
@@ -80,8 +82,10 @@ const defaultColors = ["#e8a5d0", "#c9726b", "#6b8e9c", "#7cb97c", "#d4a574", "#
 
 const defaultConfig: SingleChartConfig = {
   title: "Test Automation Market Growth 2023-2028",
-  xAxisLabel: "",
-  yAxisLabel: "",
+  xAxisLabel: "Year",
+  yAxisLabel: "Market Value",
+  yAxisMax: 60,
+  yAxisStep: 10,
   legendLabel: "Market Value (USD Billions)",
   uniformColor: "#e8a5d0",
   colorMode: "uniform",
@@ -165,10 +169,8 @@ export default function SingleBarChart() {
     }
   }, [config.backgroundColor]);
 
-  const maxValue = Math.max(...config.dataPoints.map(dp => dp.value));
-  const yAxisMax = Math.ceil(maxValue / 10) * 10 + 10;
   const yAxisTicks = [];
-  for (let i = 0; i <= yAxisMax; i += 10) {
+  for (let i = 0; i <= config.yAxisMax; i += config.yAxisStep) {
     yAxisTicks.push(i);
   }
 
@@ -239,14 +241,44 @@ export default function SingleBarChart() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Value Suffix</Label>
+                      <Label>X-Axis Label</Label>
                       <Input
-                        value={config.valueFormat}
-                        onChange={(e) => updateConfig("valueFormat", e.target.value)}
-                        placeholder="e.g., K, B, %"
-                        data-testid="input-format"
+                        value={config.xAxisLabel}
+                        onChange={(e) => updateConfig("xAxisLabel", e.target.value)}
+                        data-testid="input-xaxis"
                       />
                     </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <Label>Y-Axis Max</Label>
+                      <Input
+                        type="number"
+                        value={config.yAxisMax}
+                        onChange={(e) => updateConfig("yAxisMax", Number(e.target.value))}
+                        data-testid="input-y-max"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Y-Axis Step</Label>
+                      <Input
+                        type="number"
+                        value={config.yAxisStep}
+                        onChange={(e) => updateConfig("yAxisStep", Number(e.target.value))}
+                        data-testid="input-y-step"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Value Suffix</Label>
+                    <Input
+                      value={config.valueFormat}
+                      onChange={(e) => updateConfig("valueFormat", e.target.value)}
+                      placeholder="e.g., K, B, %"
+                      data-testid="input-format"
+                    />
                   </div>
 
                   <Separator />
@@ -502,7 +534,7 @@ export default function SingleBarChart() {
                           key={tick}
                           className="absolute left-0 right-0 h-px"
                           style={{ 
-                            bottom: `${(tick / yAxisMax) * 100}%`,
+                            bottom: `${(tick / config.yAxisMax) * 100}%`,
                             backgroundColor: config.textColor, 
                             opacity: tick === 0 ? 0.3 : 0.1 
                           }}
@@ -511,7 +543,7 @@ export default function SingleBarChart() {
 
                       <div className="absolute inset-0 flex items-end justify-around px-4 pb-1">
                         {config.dataPoints.map((dp) => {
-                          const barHeight = Math.max(4, (dp.value / yAxisMax) * 270);
+                          const barHeight = Math.max(4, (dp.value / config.yAxisMax) * 270);
                           const barColor = getBarColor(dp);
                           
                           return (

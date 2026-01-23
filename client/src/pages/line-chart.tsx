@@ -64,6 +64,10 @@ interface DataPoint {
 
 interface LineChartConfig {
   title: string;
+  xAxisLabel: string;
+  yAxisLabel: string;
+  yAxisMax: number;
+  yAxisStep: number;
   lineColor: string;
   pointColor: string;
   annotationBgColor: string;
@@ -79,6 +83,10 @@ interface LineChartConfig {
 
 const defaultConfig: LineChartConfig = {
   title: "Median Playwright Suite Duration VS Adoption Maturity (2024-2026)",
+  xAxisLabel: "Adoption Stage",
+  yAxisLabel: "Duration (min)",
+  yAxisMax: 30,
+  yAxisStep: 5,
   lineColor: "#6b8e9c",
   pointColor: "#6b8e9c",
   annotationBgColor: "#ffffff",
@@ -162,10 +170,8 @@ export default function LineChart() {
     }
   }, [config.backgroundColor]);
 
-  const maxValue = Math.max(...config.dataPoints.map(dp => dp.value));
-  const yAxisMax = Math.ceil(maxValue / 5) * 5 + 5;
   const yAxisTicks = [];
-  for (let i = 0; i <= yAxisMax; i += 5) {
+  for (let i = 0; i <= config.yAxisMax; i += config.yAxisStep) {
     yAxisTicks.push(i);
   }
 
@@ -177,7 +183,7 @@ export default function LineChart() {
 
   const getPointPosition = (index: number, value: number) => {
     const x = padding.left + (index / (config.dataPoints.length - 1)) * plotWidth;
-    const y = padding.top + plotHeight - (value / yAxisMax) * plotHeight;
+    const y = padding.top + plotHeight - (value / config.yAxisMax) * plotHeight;
     return { x, y };
   };
 
@@ -228,6 +234,46 @@ export default function LineChart() {
                       onChange={(e) => updateConfig("title", e.target.value)}
                       data-testid="input-title"
                     />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <Label>Y-Axis Label</Label>
+                      <Input
+                        value={config.yAxisLabel}
+                        onChange={(e) => updateConfig("yAxisLabel", e.target.value)}
+                        data-testid="input-yaxis"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>X-Axis Label</Label>
+                      <Input
+                        value={config.xAxisLabel}
+                        onChange={(e) => updateConfig("xAxisLabel", e.target.value)}
+                        data-testid="input-xaxis"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <Label>Y-Axis Max</Label>
+                      <Input
+                        type="number"
+                        value={config.yAxisMax}
+                        onChange={(e) => updateConfig("yAxisMax", Number(e.target.value))}
+                        data-testid="input-y-max"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Y-Axis Step</Label>
+                      <Input
+                        type="number"
+                        value={config.yAxisStep}
+                        onChange={(e) => updateConfig("yAxisStep", Number(e.target.value))}
+                        data-testid="input-y-step"
+                      />
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
@@ -540,13 +586,12 @@ export default function LineChart() {
                         <line
                           key={tick}
                           x1={padding.left}
-                          y1={padding.top + plotHeight - (tick / yAxisMax) * plotHeight}
+                          y1={padding.top + plotHeight - (tick / config.yAxisMax) * plotHeight}
                           x2={chartWidth - padding.right}
-                          y2={padding.top + plotHeight - (tick / yAxisMax) * plotHeight}
+                          y2={padding.top + plotHeight - (tick / config.yAxisMax) * plotHeight}
                           stroke={config.textColor}
-                          strokeOpacity={tick === 0 ? 0.4 : 0.25}
+                          strokeOpacity={tick === 0 ? 0.3 : 0.1}
                           strokeWidth={1}
-                          strokeDasharray={tick === 0 ? "none" : "4 4"}
                         />
                       ))}
 

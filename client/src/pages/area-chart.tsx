@@ -18,6 +18,7 @@ interface DataPoint {
 
 interface ChartConfig {
   title: string;
+  xAxisLabel: string;
   yAxisLabel: string;
   lineColor: string;
   fillColor: string;
@@ -47,6 +48,7 @@ const defaultDataPoints: DataPoint[] = [
 
 const defaultConfig: ChartConfig = {
   title: "Global QA/Testing Market and Budget Trends\n(2020-2029)",
+  xAxisLabel: "Year",
   yAxisLabel: "Market Size (USD Billion)",
   lineColor: "#22c55e",
   fillColor: "#22c55e",
@@ -191,13 +193,23 @@ export default function AreaChart() {
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <Label>Y-Axis Label</Label>
-                    <Input
-                      value={config.yAxisLabel}
-                      onChange={(e) => setConfig({ ...config, yAxisLabel: e.target.value })}
-                      data-testid="input-y-axis-label"
-                    />
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <Label>Y-Axis Label</Label>
+                      <Input
+                        value={config.yAxisLabel}
+                        onChange={(e) => setConfig({ ...config, yAxisLabel: e.target.value })}
+                        data-testid="input-y-axis-label"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>X-Axis Label</Label>
+                      <Input
+                        value={config.xAxisLabel}
+                        onChange={(e) => setConfig({ ...config, xAxisLabel: e.target.value })}
+                        data-testid="input-x-axis-label"
+                      />
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
