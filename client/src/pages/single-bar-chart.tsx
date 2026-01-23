@@ -508,11 +508,6 @@ export default function SingleBarChart() {
 
                   <div className="flex-1">
                     <div className="relative" style={{ height: "280px" }}>
-                      <div 
-                        className="absolute left-0 right-0 bottom-0 h-px"
-                        style={{ backgroundColor: config.textColor, opacity: 0.3 }}
-                      />
-                      
                       {yAxisTicks.map((tick) => (
                         <div
                           key={tick}
@@ -520,20 +515,20 @@ export default function SingleBarChart() {
                           style={{ 
                             bottom: `${(tick / yAxisMax) * 100}%`,
                             backgroundColor: config.textColor, 
-                            opacity: 0.1 
+                            opacity: tick === 0 ? 0.3 : 0.1 
                           }}
                         />
                       ))}
 
-                      <div className="flex items-end justify-around h-full px-4">
+                      <div className="absolute inset-0 flex items-end justify-around px-4 pb-1">
                         {config.dataPoints.map((dp) => {
-                          const barHeight = (dp.value / yAxisMax) * 250;
+                          const barHeight = Math.max(4, (dp.value / yAxisMax) * 270);
                           const barColor = getBarColor(dp);
                           
                           return (
                             <div
                               key={dp.id}
-                              className="flex flex-col items-center"
+                              className="flex flex-col items-center justify-end"
                               style={{ width: "60px" }}
                             >
                               <div
@@ -546,11 +541,13 @@ export default function SingleBarChart() {
                                 {dp.value}{config.valueFormat}
                               </div>
                               <div
-                                className="w-14 rounded-md transition-all duration-300 mb-2"
+                                className="w-14 rounded-md"
                                 style={{
                                   height: `${barHeight}px`,
                                   backgroundColor: barColor,
-                                  border: `1px solid ${darkenColor(barColor, 20)}`,
+                                  borderWidth: "1px",
+                                  borderStyle: "solid",
+                                  borderColor: darkenColor(barColor, 20),
                                 }}
                               />
                             </div>
@@ -571,7 +568,7 @@ export default function SingleBarChart() {
                             style={{ backgroundColor: config.textColor, opacity: 0.3 }}
                           />
                           <div
-                            className="text-sm text-center mt-2"
+                            className="text-sm text-center mt-1"
                             style={{ color: config.textColor, fontFamily: "'Geist Mono', monospace" }}
                           >
                             {dp.label}
