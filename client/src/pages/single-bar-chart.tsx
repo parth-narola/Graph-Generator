@@ -19,17 +19,17 @@ import testdinoLogo from "@assets/image_1769153159547.png";
 function hexToHsl(hex: string): { h: number; s: number; l: number } {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   if (!result) return { h: 0, s: 0, l: 50 };
-  
+
   let r = parseInt(result[1], 16) / 255;
   let g = parseInt(result[2], 16) / 255;
   let b = parseInt(result[3], 16) / 255;
-  
+
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
   let h = 0;
   let s = 0;
   const l = (max + min) / 2;
-  
+
   if (max !== min) {
     const d = max - min;
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
@@ -39,7 +39,7 @@ function hexToHsl(hex: string): { h: number; s: number; l: number } {
       case b: h = ((r - g) / d + 4) / 6; break;
     }
   }
-  
+
   return { h: h * 360, s: s * 100, l: l * 100 };
 }
 
@@ -132,11 +132,11 @@ export default function SingleBarChart() {
     const colorIndex = config.dataPoints.length % defaultColors.length;
     setConfig(prev => ({
       ...prev,
-      dataPoints: [...prev.dataPoints, { 
-        id: newId, 
-        label: "New", 
-        value: 50, 
-        color: defaultColors[colorIndex] 
+      dataPoints: [...prev.dataPoints, {
+        id: newId,
+        label: "New",
+        value: 50,
+        color: defaultColors[colorIndex]
       }],
     }));
   };
@@ -154,7 +154,7 @@ export default function SingleBarChart() {
 
   const exportChart = useCallback(async (format: "png" | "svg") => {
     if (!chartRef.current) return;
-    
+
     setIsExporting(true);
     try {
       const options = {
@@ -163,10 +163,10 @@ export default function SingleBarChart() {
         backgroundColor: config.backgroundColor,
         skipFonts: true,
       };
-      
+
       let dataUrl: string;
       let filename: string;
-      
+
       if (format === "svg") {
         dataUrl = await toSvg(chartRef.current, options);
         filename = "single-bar-chart.svg";
@@ -174,7 +174,7 @@ export default function SingleBarChart() {
         dataUrl = await toPng(chartRef.current, options);
         filename = "single-bar-chart.png";
       }
-      
+
       const link = document.createElement("a");
       link.download = filename;
       link.href = dataUrl;
@@ -422,7 +422,7 @@ export default function SingleBarChart() {
                         Add
                       </Button>
                     </div>
-                    
+
                     <div className="space-y-3">
                       {config.dataPoints.map((dp, index) => (
                         <Card key={dp.id} className="p-3">
@@ -495,166 +495,166 @@ export default function SingleBarChart() {
             </CardHeader>
             <CardContent>
               <div className="overflow-auto">
-                <div 
+                <div
                   ref={chartRef}
-                  className="rounded-lg p-8 min-w-[600px]"
+                  className="p-8 min-w-[600px]"
                   style={{
                     backgroundColor: config.backgroundColor,
                     border: `1px solid ${config.borderColor}`,
                   }}
                   data-testid="chart-preview"
                 >
-                <div className="flex items-start justify-between mb-2">
-                  <h2
-                    className="text-xl font-bold flex-1 pr-4"
-                    style={{ color: config.textColor, fontFamily: "'Geist', sans-serif" }}
-                  >
-                    {config.title}
-                  </h2>
-                  <div className="flex items-center shrink-0">
-                    <img
-                      src={testdinoLogo}
-                      alt="TestDino"
-                      className="h-8 w-auto"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2 mb-8">
-                  <div
-                    className="w-4 h-4 rounded-full"
-                    style={{ backgroundColor: config.colorMode === "uniform" ? config.uniformColor : config.dataPoints[0]?.color || "#e8a5d0" }}
-                  />
-                  <span
-                    className="text-sm"
-                    style={{ color: config.textColor, fontFamily: "'Geist Mono', monospace" }}
-                  >
-                    {config.legendLabel}
-                  </span>
-                </div>
-
-                <div className="flex">
-                  {config.yAxisLabel && (
-                    <div
-                      className="flex items-center justify-center shrink-0 mr-1"
-                      style={{ width: "20px", height: "280px" }}
+                  <div className="flex items-start justify-between mb-2">
+                    <h2
+                      className="text-xl font-bold flex-1 pr-4"
+                      style={{ color: config.textColor, fontFamily: "'Geist', sans-serif" }}
                     >
-                      <span
-                        style={{
-                          transform: "rotate(-90deg)",
-                          whiteSpace: "nowrap",
-                          color: config.textColor,
-                          fontFamily: "'Geist Mono', monospace",
-                          fontSize: "11px",
-                          fontStyle: "italic",
-                          opacity: 0.7,
-                        }}
-                      >
-                        {config.yAxisLabel}
-                      </span>
+                      {config.title}
+                    </h2>
+                    <div className="flex items-center shrink-0">
+                      <img
+                        src={testdinoLogo}
+                        alt="TestDino"
+                        className="h-8 w-auto"
+                      />
                     </div>
-                  )}
-                  <div 
-                    className="flex flex-col justify-between pr-2 text-right"
-                    style={{ height: "280px" }}
-                  >
-                    {[...yAxisTicks].reverse().map((tick) => (
-                      <span
-                        key={tick}
-                        className="text-xs"
-                        style={{ 
-                          color: config.textColor, 
-                          fontFamily: "'Geist Mono', monospace",
-                          opacity: 0.7
-                        }}
-                      >
-                        {tick}{config.valueFormat}
-                      </span>
-                    ))}
                   </div>
 
-                  <div className="flex-1">
-                    <div className="relative" style={{ height: "280px" }}>
-                      {yAxisTicks.map((tick) => (
-                        <div
-                          key={tick}
-                          className="absolute left-0 right-0 h-px"
-                          style={{ 
-                            bottom: `${(tick / config.yAxisMax) * 100}%`,
-                            backgroundColor: config.textColor, 
-                            opacity: tick === 0 ? 0.3 : 0.1 
-                          }}
-                        />
-                      ))}
+                  <div className="flex items-center gap-2 mb-8">
+                    <div
+                      className="w-4 h-4 rounded-full"
+                      style={{ backgroundColor: config.colorMode === "uniform" ? config.uniformColor : config.dataPoints[0]?.color || "#e8a5d0" }}
+                    />
+                    <span
+                      className="text-sm"
+                      style={{ color: config.textColor, fontFamily: "'Geist Mono', monospace" }}
+                    >
+                      {config.legendLabel}
+                    </span>
+                  </div>
 
-                      <div className="absolute inset-0 flex items-end justify-around px-4 pb-1">
-                        {config.dataPoints.map((dp) => {
-                          const barHeight = Math.max(4, (dp.value / config.yAxisMax) * 270);
-                          const barColor = getBarColor(dp);
-                          
-                          return (
-                            <div
-                              key={dp.id}
-                              className="flex flex-col items-center justify-end"
-                              style={{ width: "60px" }}
-                            >
+                  <div className="flex">
+                    {config.yAxisLabel && (
+                      <div
+                        className="flex items-center justify-center shrink-0 mr-1"
+                        style={{ width: "20px", height: "280px" }}
+                      >
+                        <span
+                          style={{
+                            transform: "rotate(-90deg)",
+                            whiteSpace: "nowrap",
+                            color: config.textColor,
+                            fontFamily: "'Geist Mono', monospace",
+                            fontSize: "11px",
+                            fontStyle: "italic",
+                            opacity: 0.7,
+                          }}
+                        >
+                          {config.yAxisLabel}
+                        </span>
+                      </div>
+                    )}
+                    <div
+                      className="flex flex-col justify-between pr-2 text-right"
+                      style={{ height: "280px" }}
+                    >
+                      {[...yAxisTicks].reverse().map((tick) => (
+                        <span
+                          key={tick}
+                          className="text-xs"
+                          style={{
+                            color: config.textColor,
+                            fontFamily: "'Geist Mono', monospace",
+                            opacity: 0.7
+                          }}
+                        >
+                          {tick}{config.valueFormat}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="flex-1">
+                      <div className="relative" style={{ height: "280px" }}>
+                        {yAxisTicks.map((tick) => (
+                          <div
+                            key={tick}
+                            className="absolute left-0 right-0 h-px"
+                            style={{
+                              bottom: `${(tick / config.yAxisMax) * 100}%`,
+                              backgroundColor: config.textColor,
+                              opacity: tick === 0 ? 0.3 : 0.1
+                            }}
+                          />
+                        ))}
+
+                        <div className="absolute inset-0 flex items-end justify-around px-4 pb-1">
+                          {config.dataPoints.map((dp) => {
+                            const barHeight = Math.max(4, (dp.value / config.yAxisMax) * 270);
+                            const barColor = getBarColor(dp);
+
+                            return (
                               <div
-                                className="text-sm font-bold mb-1"
-                                style={{ 
-                                  color: config.textColor, 
-                                  fontFamily: "'Geist Mono', monospace" 
-                                }}
+                                key={dp.id}
+                                className="flex flex-col items-center justify-end"
+                                style={{ width: "60px" }}
                               >
-                                {dp.value}{config.valueFormat}
+                                <div
+                                  className="text-sm font-bold mb-1"
+                                  style={{
+                                    color: config.textColor,
+                                    fontFamily: "'Geist Mono', monospace"
+                                  }}
+                                >
+                                  {dp.value}{config.valueFormat}
+                                </div>
+                                <div
+                                  className="w-14 rounded-md"
+                                  style={{
+                                    height: `${barHeight}px`,
+                                    backgroundColor: barColor,
+                                    borderWidth: "1px",
+                                    borderStyle: "solid",
+                                    borderColor: darkenColor(barColor, 20),
+                                  }}
+                                />
                               </div>
-                              <div
-                                className="w-14 rounded-md"
-                                style={{
-                                  height: `${barHeight}px`,
-                                  backgroundColor: barColor,
-                                  borderWidth: "1px",
-                                  borderStyle: "solid",
-                                  borderColor: darkenColor(barColor, 20),
-                                }}
-                              />
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      <div className="flex justify-around px-4">
+                        {config.dataPoints.map((dp) => (
+                          <div
+                            key={dp.id}
+                            className="flex flex-col items-center"
+                            style={{ width: "60px" }}
+                          >
+                            <div
+                              className="w-px h-3"
+                              style={{ backgroundColor: config.textColor, opacity: 0.3 }}
+                            />
+                            <div
+                              className="text-sm text-center mt-1"
+                              style={{ color: config.textColor, fontFamily: "'Geist Mono', monospace" }}
+                            >
+                              {dp.label}
                             </div>
-                          );
-                        })}
+                          </div>
+                        ))}
                       </div>
                     </div>
+                  </div>
 
-                    <div className="flex justify-around px-4">
-                      {config.dataPoints.map((dp) => (
-                        <div
-                          key={dp.id}
-                          className="flex flex-col items-center"
-                          style={{ width: "60px" }}
-                        >
-                          <div 
-                            className="w-px h-3"
-                            style={{ backgroundColor: config.textColor, opacity: 0.3 }}
-                          />
-                          <div
-                            className="text-sm text-center mt-1"
-                            style={{ color: config.textColor, fontFamily: "'Geist Mono', monospace" }}
-                          >
-                            {dp.label}
-                          </div>
-                        </div>
-                      ))}
+                  {config.xAxisLabel && (
+                    <div
+                      className="text-center mt-2 text-sm"
+                      style={{ color: config.textColor, fontFamily: "'Geist', sans-serif", fontStyle: "italic" }}
+                    >
+                      {config.xAxisLabel}
                     </div>
-                  </div>
+                  )}
                 </div>
-
-                {config.xAxisLabel && (
-                  <div
-                    className="text-center mt-2 text-sm"
-                    style={{ color: config.textColor, fontFamily: "'Geist', sans-serif", fontStyle: "italic" }}
-                  >
-                    {config.xAxisLabel}
-                  </div>
-                )}
-              </div>
               </div>
             </CardContent>
           </Card>

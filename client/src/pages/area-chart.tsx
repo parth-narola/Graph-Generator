@@ -114,7 +114,7 @@ export default function AreaChart() {
     try {
       const options = {
         quality: 1.0,
-        pixelRatio: 2,
+        pixelRatio: 3,
         backgroundColor: config.backgroundColor,
         skipFonts: true,
       };
@@ -536,181 +536,181 @@ export default function AreaChart() {
                 <div
                   ref={chartRef}
                   data-testid="chart-preview"
-                  className="rounded-lg p-8 min-w-[600px]"
+                  className="p-8 min-w-[600px]"
                   style={{
                     backgroundColor: config.backgroundColor,
                     border: `1px solid ${config.borderColor}`,
                   }}
                 >
-                    <div className="flex items-start justify-between mb-2">
-                      <h2
-                        className="text-xl font-bold flex-1 pr-4"
-                        style={{ color: config.textColor, fontFamily: "'Geist', sans-serif" }}
-                      >
-                        {config.title.split("\n").join(" ")}
-                      </h2>
-                      <div className="flex items-center shrink-0">
-                        <img
-                          src={testDinoLogo}
-                          alt="TestDino"
-                          className="h-8 w-auto"
-                        />
-                      </div>
+                  <div className="flex items-start justify-between mb-2">
+                    <h2
+                      className="text-xl font-bold flex-1 pr-4"
+                      style={{ color: config.textColor, fontFamily: "'Geist', sans-serif" }}
+                    >
+                      {config.title.split("\n").join(" ")}
+                    </h2>
+                    <div className="flex items-center shrink-0">
+                      <img
+                        src={testDinoLogo}
+                        alt="TestDino"
+                        className="h-8 w-auto"
+                      />
                     </div>
-
-                    <div className="flex" style={{ minHeight: `${chartHeight}px` }}>
-                      <div
-                        className="flex items-center justify-center shrink-0 mr-2"
-                        style={{ width: "20px", height: `${chartHeight}px` }}
-                      >
-                        <span
-                          style={{
-                            transform: "rotate(-90deg)",
-                            whiteSpace: "nowrap",
-                            color: config.labelColor,
-                            fontFamily: "'Geist Mono', monospace",
-                            fontSize: "12px",
-                            fontStyle: "italic",
-                          }}
-                        >
-                          {config.yAxisLabel}
-                        </span>
-                      </div>
-
-                      <div className="flex">
-                        <div
-                          className="flex flex-col justify-between pr-2 text-right shrink-0"
-                          style={{
-                            height: `${plotHeight}px`,
-                            marginTop: `${padding.top}px`,
-                            minWidth: "30px",
-                          }}
-                        >
-                          {[...yAxisTicks].reverse().map((tick) => (
-                            <span
-                              key={tick}
-                              className="text-xs"
-                              style={{
-                                color: config.labelColor,
-                                fontFamily: "'Geist Mono', monospace",
-                                opacity: 0.7,
-                              }}
-                            >
-                              {tick}{config.valueFormat}
-                            </span>
-                          ))}
-                        </div>
-
-                        <div className="flex-1" style={{ minWidth: `${chartWidth - 60}px` }}>
-                          <svg
-                            width="100%"
-                            height={chartHeight}
-                            viewBox={`0 0 ${chartWidth} ${chartHeight}`}
-                            preserveAspectRatio="xMidYMid meet"
-                            style={{ overflow: "visible" }}
-                          >
-                            <defs>
-                              <linearGradient
-                                id="areaGradient"
-                                x1="0%"
-                                y1="0%"
-                                x2="0%"
-                                y2="100%"
-                              >
-                                <stop
-                                  offset="0%"
-                                  stopColor={config.fillColor}
-                                  stopOpacity={0.4}
-                                />
-                                <stop
-                                  offset="100%"
-                                  stopColor={config.fillColor}
-                                  stopOpacity={0.1}
-                                />
-                              </linearGradient>
-                            </defs>
-
-                            {yAxisTicks.map((tick) => (
-                              <line
-                                key={tick}
-                                x1={padding.left}
-                                y1={getY(tick)}
-                                x2={chartWidth - padding.right}
-                                y2={getY(tick)}
-                                stroke={config.gridColor}
-                                strokeWidth={1}
-                              />
-                            ))}
-
-                            <path d={areaPath} fill="url(#areaGradient)" />
-
-                            <path
-                              d={linePath}
-                              fill="none"
-                              stroke={config.lineColor}
-                              strokeWidth={config.lineWidth}
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-
-                            {dataPoints.map((dp, i) => {
-                              const x = getX(i);
-                              const y = getY(dp.value);
-                              return (
-                                <g key={i}>
-                                  <circle
-                                    cx={x}
-                                    cy={y}
-                                    r={config.pointRadius}
-                                    fill={config.backgroundColor}
-                                    stroke={config.pointColor}
-                                    strokeWidth={2}
-                                  />
-                                  <text
-                                    x={x}
-                                    y={y - 15}
-                                    textAnchor="middle"
-                                    fill={config.textColor}
-                                    fontFamily="'Geist Mono', monospace"
-                                    fontSize={13}
-                                    fontWeight="500"
-                                  >
-                                    {dp.displayValue}
-                                  </text>
-                                </g>
-                              );
-                            })}
-
-                            {dataPoints.map((dp, i) => (
-                              <text
-                                key={i}
-                                x={getX(i)}
-                                y={chartHeight - padding.bottom + 25}
-                                textAnchor="middle"
-                                fill={config.labelColor}
-                                fontFamily="'Geist Mono', monospace"
-                                fontSize={14}
-                              >
-                                {dp.label}
-                              </text>
-                            ))}
-                          </svg>
-                        </div>
-                      </div>
-                    </div>
-
-                    {config.xAxisLabel && (
-                      <div
-                        className="text-center text-sm"
-                        style={{ color: config.labelColor, fontFamily: "'Geist', sans-serif", fontStyle: "italic" }}
-                      >
-                        {config.xAxisLabel}
-                      </div>
-                    )}
                   </div>
+
+                  <div className="flex" style={{ minHeight: `${chartHeight}px` }}>
+                    <div
+                      className="flex items-center justify-center shrink-0 mr-2"
+                      style={{ width: "20px", height: `${chartHeight}px` }}
+                    >
+                      <span
+                        style={{
+                          transform: "rotate(-90deg)",
+                          whiteSpace: "nowrap",
+                          color: config.labelColor,
+                          fontFamily: "'Geist Mono', monospace",
+                          fontSize: "12px",
+                          fontStyle: "italic",
+                        }}
+                      >
+                        {config.yAxisLabel}
+                      </span>
+                    </div>
+
+                    <div className="flex">
+                      <div
+                        className="flex flex-col justify-between pr-2 text-right shrink-0"
+                        style={{
+                          height: `${plotHeight}px`,
+                          marginTop: `${padding.top}px`,
+                          minWidth: "30px",
+                        }}
+                      >
+                        {[...yAxisTicks].reverse().map((tick) => (
+                          <span
+                            key={tick}
+                            className="text-xs"
+                            style={{
+                              color: config.labelColor,
+                              fontFamily: "'Geist Mono', monospace",
+                              opacity: 0.7,
+                            }}
+                          >
+                            {tick}{config.valueFormat}
+                          </span>
+                        ))}
+                      </div>
+
+                      <div className="flex-1" style={{ minWidth: `${chartWidth - 60}px` }}>
+                        <svg
+                          width="100%"
+                          height={chartHeight}
+                          viewBox={`0 0 ${chartWidth} ${chartHeight}`}
+                          preserveAspectRatio="xMidYMid meet"
+                          style={{ overflow: "visible" }}
+                        >
+                          <defs>
+                            <linearGradient
+                              id="areaGradient"
+                              x1="0%"
+                              y1="0%"
+                              x2="0%"
+                              y2="100%"
+                            >
+                              <stop
+                                offset="0%"
+                                stopColor={config.fillColor}
+                                stopOpacity={0.4}
+                              />
+                              <stop
+                                offset="100%"
+                                stopColor={config.fillColor}
+                                stopOpacity={0.1}
+                              />
+                            </linearGradient>
+                          </defs>
+
+                          {yAxisTicks.map((tick) => (
+                            <line
+                              key={tick}
+                              x1={padding.left}
+                              y1={getY(tick)}
+                              x2={chartWidth - padding.right}
+                              y2={getY(tick)}
+                              stroke={config.gridColor}
+                              strokeWidth={1}
+                            />
+                          ))}
+
+                          <path d={areaPath} fill="url(#areaGradient)" />
+
+                          <path
+                            d={linePath}
+                            fill="none"
+                            stroke={config.lineColor}
+                            strokeWidth={config.lineWidth}
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+
+                          {dataPoints.map((dp, i) => {
+                            const x = getX(i);
+                            const y = getY(dp.value);
+                            return (
+                              <g key={i}>
+                                <circle
+                                  cx={x}
+                                  cy={y}
+                                  r={config.pointRadius}
+                                  fill={config.backgroundColor}
+                                  stroke={config.pointColor}
+                                  strokeWidth={2}
+                                />
+                                <text
+                                  x={x}
+                                  y={y - 15}
+                                  textAnchor="middle"
+                                  fill={config.textColor}
+                                  fontFamily="'Geist Mono', monospace"
+                                  fontSize={13}
+                                  fontWeight="500"
+                                >
+                                  {dp.displayValue}
+                                </text>
+                              </g>
+                            );
+                          })}
+
+                          {dataPoints.map((dp, i) => (
+                            <text
+                              key={i}
+                              x={getX(i)}
+                              y={chartHeight - padding.bottom + 25}
+                              textAnchor="middle"
+                              fill={config.labelColor}
+                              fontFamily="'Geist Mono', monospace"
+                              fontSize={14}
+                            >
+                              {dp.label}
+                            </text>
+                          ))}
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  {config.xAxisLabel && (
+                    <div
+                      className="text-center text-sm"
+                      style={{ color: config.labelColor, fontFamily: "'Geist', sans-serif", fontStyle: "italic" }}
+                    >
+                      {config.xAxisLabel}
+                    </div>
+                  )}
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
