@@ -9,46 +9,49 @@ import Home from "@/pages/home";
 import SingleBarChart from "@/pages/single-bar-chart";
 import LineChart from "@/pages/line-chart";
 import AreaChart from "@/pages/area-chart";
+// Import the new components (we will create these next)
+import MultipleBarChart from "@/pages/multiple-bar-chart";
+import PieChartPage from "@/pages/pie-chart";
+import ScatterChartPage from "@/pages/scatter-chart";
 
 function Navigation() {
   const [location] = useLocation();
-  
+
   return (
     <nav className="border-b bg-background">
-      <div className="max-w-7xl mx-auto px-6 py-3 flex gap-2">
+      <div className="max-w-7xl mx-auto px-6 py-3 flex gap-2 flex-wrap">
         <Link href="/">
-          <Button
-            variant={location === "/" ? "default" : "ghost"}
-            size="sm"
-            data-testid="nav-comparison"
-          >
+          <Button variant={location === "/" ? "default" : "ghost"} size="sm">
             Comparison Chart
           </Button>
         </Link>
         <Link href="/single">
-          <Button
-            variant={location === "/single" ? "default" : "ghost"}
-            size="sm"
-            data-testid="nav-single"
-          >
+          <Button variant={location === "/single" ? "default" : "ghost"} size="sm">
             Single Bar Chart
           </Button>
         </Link>
+        <Link href="/multiple">
+          <Button variant={location === "/multiple" ? "default" : "ghost"} size="sm">
+            Multiple Bar Chart
+          </Button>
+        </Link>
+        <Link href="/pie">
+          <Button variant={location === "/pie" ? "default" : "ghost"} size="sm">
+            Pie Chart
+          </Button>
+        </Link>
+        <Link href="/scatter">
+          <Button variant={location === "/scatter" ? "default" : "ghost"} size="sm">
+            Scatter Chart
+          </Button>
+        </Link>
         <Link href="/line">
-          <Button
-            variant={location === "/line" ? "default" : "ghost"}
-            size="sm"
-            data-testid="nav-line"
-          >
+          <Button variant={location === "/line" ? "default" : "ghost"} size="sm">
             Line Chart
           </Button>
         </Link>
         <Link href="/area">
-          <Button
-            variant={location === "/area" ? "default" : "ghost"}
-            size="sm"
-            data-testid="nav-area"
-          >
+          <Button variant={location === "/area" ? "default" : "ghost"} size="sm">
             Area Chart
           </Button>
         </Link>
@@ -62,6 +65,9 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/single" component={SingleBarChart} />
+      <Route path="/multiple" component={MultipleBarChart} />
+      <Route path="/pie" component={PieChartPage} />
+      <Route path="/scatter" component={ScatterChartPage} />
       <Route path="/line" component={LineChart} />
       <Route path="/area" component={AreaChart} />
       <Route component={NotFound} />

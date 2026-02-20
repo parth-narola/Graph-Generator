@@ -19,17 +19,17 @@ import testdinoLogo from "@assets/image_1769153159547.png";
 function hexToHsl(hex: string): { h: number; s: number; l: number } {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   if (!result) return { h: 0, s: 0, l: 50 };
-  
+
   let r = parseInt(result[1], 16) / 255;
   let g = parseInt(result[2], 16) / 255;
   let b = parseInt(result[3], 16) / 255;
-  
+
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
   let h = 0;
   let s = 0;
   const l = (max + min) / 2;
-  
+
   if (max !== min) {
     const d = max - min;
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
@@ -39,7 +39,7 @@ function hexToHsl(hex: string): { h: number; s: number; l: number } {
       case b: h = ((r - g) / d + 4) / 6; break;
     }
   }
-  
+
   return { h: h * 360, s: s * 100, l: l * 100 };
 }
 
@@ -135,11 +135,11 @@ export default function LineChart() {
     const newId = Date.now().toString();
     setConfig(prev => ({
       ...prev,
-      dataPoints: [...prev.dataPoints, { 
-        id: newId, 
-        label: "New", 
-        value: 10, 
-        annotation: "Description" 
+      dataPoints: [...prev.dataPoints, {
+        id: newId,
+        label: "New",
+        value: 10,
+        annotation: "Description"
       }],
     }));
   };
@@ -157,33 +157,43 @@ export default function LineChart() {
 
   const exportChart = useCallback(async (format: "png" | "svg") => {
     if (!chartRef.current) return;
-    
     setIsExporting(true);
+
     try {
+      const node = chartRef.current;
+
+      // Store original styles
+      const originalPadding = node.style.padding;
+      const originalOverflow = node.style.overflow;
+
+      // Temporarily add padding to capture overflow
+      node.style.padding = "100px";
+      node.style.overflow = "visible";
+
+      // Small delay to let browser re-render
+      await new Promise(resolve => setTimeout(resolve, 100));
+
       const options = {
         quality: 1,
         pixelRatio: 2,
         backgroundColor: config.backgroundColor,
-        skipFonts: true,
       };
-      
-      let dataUrl: string;
-      let filename: string;
-      
-      if (format === "svg") {
-        dataUrl = await toSvg(chartRef.current, options);
-        filename = "line-chart.svg";
-      } else {
-        dataUrl = await toPng(chartRef.current, options);
-        filename = "line-chart.png";
-      }
-      
+
+      const dataUrl = format === "svg"
+        ? await toSvg(node, options)
+        : await toPng(node, options);
+
+      // Restore original styles
+      node.style.padding = originalPadding;
+      node.style.overflow = originalOverflow;
+
       const link = document.createElement("a");
-      link.download = filename;
+      link.download = `chart-export.${format}`;
       link.href = dataUrl;
       link.click();
-    } catch (error) {
-      console.error("Failed to export chart:", error);
+
+    } catch (err) {
+      console.error("Export failed:", err);
     } finally {
       setIsExporting(false);
     }
@@ -445,7 +455,7 @@ export default function LineChart() {
                         data-testid="switch-annotations"
                       />
                     </div>
-                    
+
                     {config.showAnnotations && (
                       <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-1">
@@ -501,7 +511,7 @@ export default function LineChart() {
                         Add
                       </Button>
                     </div>
-                    
+
                     <div className="space-y-3">
                       {config.dataPoints.map((dp, index) => (
                         <Card key={dp.id} className="p-3">
@@ -567,235 +577,235 @@ export default function LineChart() {
             </CardHeader>
             <CardContent>
               <div className="overflow-auto">
-                <div 
+                <div
                   ref={chartRef}
-                  className="rounded-lg p-8 min-w-[750px]"
+                  className=" p-8 min-w-[750px]"
                   style={{
                     backgroundColor: config.backgroundColor,
                     border: `1px solid ${config.borderColor}`,
                   }}
                   data-testid="chart-preview"
                 >
-                <div className="flex items-start justify-between mb-8">
-                  <h2
-                    className="text-xl font-bold flex-1 pr-4"
-                    style={{ color: config.textColor, fontFamily: "'Geist', sans-serif" }}
-                  >
-                    {config.title}
-                  </h2>
-                  <div className="flex items-center shrink-0">
-                    <img
-                      src={testdinoLogo}
-                      alt="TestDino"
-                      className="h-8 w-auto"
-                    />
-                  </div>
-                </div>
-
-                <div className="flex" style={{ minHeight: `${chartHeight + 40}px` }}>
-                  {config.yAxisLabel && (
-                    <div
-                      className="flex items-center justify-center shrink-0 mr-1"
-                      style={{ width: "20px", height: `${chartHeight}px` }}
+                  <div className="flex items-start justify-between mb-8">
+                    <h2
+                      className="text-xl font-bold flex-1 pr-4"
+                      style={{ color: config.textColor, fontFamily: "'Geist', sans-serif" }}
                     >
-                      <span
-                        style={{
-                          transform: "rotate(-90deg)",
-                          whiteSpace: "nowrap",
-                          color: config.textColor,
-                          fontFamily: "'Geist Mono', monospace",
-                          fontSize: "11px",
-                          fontStyle: "italic",
-                          opacity: 0.7,
-                        }}
+                      {config.title}
+                    </h2>
+                    <div className="flex items-center shrink-0">
+                      <img
+                        src={testdinoLogo}
+                        alt="TestDino"
+                        className="h-8 w-auto"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex" style={{ minHeight: `${chartHeight + 40}px` }}>
+                    {config.yAxisLabel && (
+                      <div
+                        className="flex items-center justify-center shrink-0 mr-1"
+                        style={{ width: "20px", height: `${chartHeight}px` }}
                       >
-                        {config.yAxisLabel}
-                      </span>
+                        <span
+                          style={{
+                            transform: "rotate(-90deg)",
+                            whiteSpace: "nowrap",
+                            color: config.textColor,
+                            fontFamily: "'Geist Mono', monospace",
+                            fontSize: "11px",
+                            fontStyle: "italic",
+                            opacity: 0.7,
+                          }}
+                        >
+                          {config.yAxisLabel}
+                        </span>
+                      </div>
+                    )}
+                    <div
+                      className="flex flex-col justify-between pr-2 text-right shrink-0"
+                      style={{ height: `${chartHeight}px`, paddingTop: `${padding.top}px`, paddingBottom: `${padding.bottom}px`, minWidth: '30px' }}
+                    >
+                      {[...yAxisTicks].reverse().map((tick) => (
+                        <span
+                          key={tick}
+                          className="text-xs"
+                          style={{
+                            color: config.textColor,
+                            fontFamily: "'Geist Mono', monospace",
+                            opacity: 0.7
+                          }}
+                        >
+                          {tick}{config.valueFormat}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="flex-1" style={{ minWidth: '500px' }}>
+                      <svg
+                        width="100%"
+                        height={chartHeight}
+                        viewBox={`0 0 ${chartWidth} ${chartHeight}`}
+                        preserveAspectRatio="xMidYMid meet"
+                        style={{ overflow: 'visible' }}
+                      >
+                        {yAxisTicks.map((tick) => (
+                          <line
+                            key={tick}
+                            x1={padding.left}
+                            y1={padding.top + plotHeight - (tick / config.yAxisMax) * plotHeight}
+                            x2={chartWidth - padding.right}
+                            y2={padding.top + plotHeight - (tick / config.yAxisMax) * plotHeight}
+                            stroke={config.textColor}
+                            strokeOpacity={tick === 0 ? 0.3 : 0.1}
+                            strokeWidth={1}
+                          />
+                        ))}
+
+                        <path
+                          d={linePath}
+                          fill="none"
+                          stroke={config.lineColor}
+                          strokeWidth={config.lineWidth}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+
+                        {config.dataPoints.map((dp, index) => {
+                          const { x, y } = getPointPosition(index, dp.value);
+                          return (
+                            <g key={dp.id}>
+                              <circle
+                                cx={x}
+                                cy={y}
+                                r={config.pointSize / 2 + 2}
+                                fill={config.backgroundColor}
+                                stroke={config.pointColor}
+                                strokeWidth={config.lineWidth}
+                              />
+                              <circle
+                                cx={x}
+                                cy={y}
+                                r={config.pointSize / 2 - 1}
+                                fill={config.pointColor}
+                              />
+                            </g>
+                          );
+                        })}
+
+                        {config.showAnnotations && config.dataPoints.map((dp, index) => {
+                          const { x, y } = getPointPosition(index, dp.value);
+                          const words = dp.annotation.split(' ');
+                          let annotationLines: string[] = [];
+                          if (words.length > 2) {
+                            const mid = Math.ceil(words.length / 2);
+                            annotationLines = [
+                              words.slice(0, mid).join(' '),
+                              words.slice(mid).join(' ')
+                            ];
+                          } else {
+                            annotationLines = [dp.annotation];
+                          }
+                          const maxLineLength = Math.max(...annotationLines.map(l => l.length), String(dp.value).length + 2);
+                          const boxWidth = Math.max(80, maxLineLength * 6.5 + 20);
+                          const boxHeight = 30 + annotationLines.length * 14;
+                          const isAbove = index % 2 === 0;
+                          const boxY = isAbove ? y - boxHeight - 20 : y + 20;
+                          const boxX = x - boxWidth / 2;
+
+                          const boxCenterX = boxX + boxWidth / 2;
+
+                          return (
+                            <g key={`annotation-${dp.id}`}>
+                              <line
+                                x1={x}
+                                y1={y + (isAbove ? -config.pointSize / 2 - 4 : config.pointSize / 2 + 4)}
+                                x2={boxCenterX}
+                                y2={isAbove ? boxY + boxHeight + 2 : boxY - 2}
+                                stroke={config.textColor}
+                                strokeOpacity={0.15}
+                                strokeWidth={1}
+                                strokeDasharray="3 3"
+                              />
+                              <rect
+                                x={boxX}
+                                y={boxY}
+                                width={boxWidth}
+                                height={boxHeight}
+                                rx={4}
+                                fill={config.annotationBgColor}
+                                stroke={config.textColor}
+                                strokeOpacity={0.15}
+                                strokeWidth={1}
+                              />
+                              <text
+                                x={boxX + boxWidth / 2}
+                                y={boxY + 18}
+                                textAnchor="middle"
+                                fill={config.lineColor}
+                                fontFamily="'Geist Mono', monospace"
+                                fontSize={14}
+                                fontWeight="bold"
+                              >
+                                {dp.value}
+                              </text>
+                              {annotationLines.map((line, lineIndex) => (
+                                <text
+                                  key={lineIndex}
+                                  x={boxX + boxWidth / 2}
+                                  y={boxY + 32 + lineIndex * 12}
+                                  textAnchor="middle"
+                                  fill={config.annotationTextColor}
+                                  fontFamily="'Geist Mono', monospace"
+                                  fontSize={10}
+                                >
+                                  {line}
+                                </text>
+                              ))}
+                            </g>
+                          );
+                        })}
+
+                        {config.dataPoints.map((dp, index) => {
+                          const x = padding.left + (index / (config.dataPoints.length - 1)) * plotWidth;
+                          return (
+                            <g key={`label-${dp.id}`}>
+                              <line
+                                x1={x}
+                                y1={padding.top + plotHeight}
+                                x2={x}
+                                y2={padding.top + plotHeight + 8}
+                                stroke={config.textColor}
+                                strokeOpacity={0.3}
+                                strokeWidth={1}
+                              />
+                              <text
+                                x={x}
+                                y={padding.top + plotHeight + 25}
+                                textAnchor="middle"
+                                fill={config.textColor}
+                                fontFamily="'Geist Mono', monospace"
+                                fontSize={12}
+                              >
+                                {dp.label}
+                              </text>
+                            </g>
+                          );
+                        })}
+                      </svg>
+                    </div>
+                  </div>
+
+                  {config.xAxisLabel && (
+                    <div
+                      className="text-center text-sm"
+                      style={{ color: config.textColor, fontFamily: "'Geist', sans-serif", fontStyle: "italic", opacity: 0.8 }}
+                    >
+                      {config.xAxisLabel}
                     </div>
                   )}
-                  <div 
-                    className="flex flex-col justify-between pr-2 text-right shrink-0"
-                    style={{ height: `${chartHeight}px`, paddingTop: `${padding.top}px`, paddingBottom: `${padding.bottom}px`, minWidth: '30px' }}
-                  >
-                    {[...yAxisTicks].reverse().map((tick) => (
-                      <span
-                        key={tick}
-                        className="text-xs"
-                        style={{ 
-                          color: config.textColor, 
-                          fontFamily: "'Geist Mono', monospace",
-                          opacity: 0.7
-                        }}
-                      >
-                        {tick}{config.valueFormat}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="flex-1" style={{ minWidth: '500px' }}>
-                    <svg 
-                      width="100%" 
-                      height={chartHeight} 
-                      viewBox={`0 0 ${chartWidth} ${chartHeight}`}
-                      preserveAspectRatio="xMidYMid meet"
-                      style={{ overflow: 'visible' }}
-                    >
-                      {yAxisTicks.map((tick) => (
-                        <line
-                          key={tick}
-                          x1={padding.left}
-                          y1={padding.top + plotHeight - (tick / config.yAxisMax) * plotHeight}
-                          x2={chartWidth - padding.right}
-                          y2={padding.top + plotHeight - (tick / config.yAxisMax) * plotHeight}
-                          stroke={config.textColor}
-                          strokeOpacity={tick === 0 ? 0.3 : 0.1}
-                          strokeWidth={1}
-                        />
-                      ))}
-
-                      <path
-                        d={linePath}
-                        fill="none"
-                        stroke={config.lineColor}
-                        strokeWidth={config.lineWidth}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-
-                      {config.dataPoints.map((dp, index) => {
-                        const { x, y } = getPointPosition(index, dp.value);
-                        return (
-                          <g key={dp.id}>
-                            <circle
-                              cx={x}
-                              cy={y}
-                              r={config.pointSize / 2 + 2}
-                              fill={config.backgroundColor}
-                              stroke={config.pointColor}
-                              strokeWidth={config.lineWidth}
-                            />
-                            <circle
-                              cx={x}
-                              cy={y}
-                              r={config.pointSize / 2 - 1}
-                              fill={config.pointColor}
-                            />
-                          </g>
-                        );
-                      })}
-
-                      {config.showAnnotations && config.dataPoints.map((dp, index) => {
-                        const { x, y } = getPointPosition(index, dp.value);
-                        const words = dp.annotation.split(' ');
-                        let annotationLines: string[] = [];
-                        if (words.length > 2) {
-                          const mid = Math.ceil(words.length / 2);
-                          annotationLines = [
-                            words.slice(0, mid).join(' '),
-                            words.slice(mid).join(' ')
-                          ];
-                        } else {
-                          annotationLines = [dp.annotation];
-                        }
-                        const maxLineLength = Math.max(...annotationLines.map(l => l.length), String(dp.value).length + 2);
-                        const boxWidth = Math.max(80, maxLineLength * 6.5 + 20);
-                        const boxHeight = 30 + annotationLines.length * 14;
-                        const isAbove = index % 2 === 0;
-                        const boxY = isAbove ? y - boxHeight - 20 : y + 20;
-                        const boxX = x - boxWidth / 2;
-                        
-                        const boxCenterX = boxX + boxWidth / 2;
-                        
-                        return (
-                          <g key={`annotation-${dp.id}`}>
-                            <line
-                              x1={x}
-                              y1={y + (isAbove ? -config.pointSize/2 - 4 : config.pointSize/2 + 4)}
-                              x2={boxCenterX}
-                              y2={isAbove ? boxY + boxHeight + 2 : boxY - 2}
-                              stroke={config.textColor}
-                              strokeOpacity={0.15}
-                              strokeWidth={1}
-                              strokeDasharray="3 3"
-                            />
-                            <rect
-                              x={boxX}
-                              y={boxY}
-                              width={boxWidth}
-                              height={boxHeight}
-                              rx={4}
-                              fill={config.annotationBgColor}
-                              stroke={config.textColor}
-                              strokeOpacity={0.15}
-                              strokeWidth={1}
-                            />
-                            <text
-                              x={boxX + boxWidth / 2}
-                              y={boxY + 18}
-                              textAnchor="middle"
-                              fill={config.lineColor}
-                              fontFamily="'Geist Mono', monospace"
-                              fontSize={14}
-                              fontWeight="bold"
-                            >
-                              {dp.value}
-                            </text>
-                            {annotationLines.map((line, lineIndex) => (
-                              <text
-                                key={lineIndex}
-                                x={boxX + boxWidth / 2}
-                                y={boxY + 32 + lineIndex * 12}
-                                textAnchor="middle"
-                                fill={config.annotationTextColor}
-                                fontFamily="'Geist Mono', monospace"
-                                fontSize={10}
-                              >
-                                {line}
-                              </text>
-                            ))}
-                          </g>
-                        );
-                      })}
-
-                      {config.dataPoints.map((dp, index) => {
-                        const x = padding.left + (index / (config.dataPoints.length - 1)) * plotWidth;
-                        return (
-                          <g key={`label-${dp.id}`}>
-                            <line
-                              x1={x}
-                              y1={padding.top + plotHeight}
-                              x2={x}
-                              y2={padding.top + plotHeight + 8}
-                              stroke={config.textColor}
-                              strokeOpacity={0.3}
-                              strokeWidth={1}
-                            />
-                            <text
-                              x={x}
-                              y={padding.top + plotHeight + 25}
-                              textAnchor="middle"
-                              fill={config.textColor}
-                              fontFamily="'Geist Mono', monospace"
-                              fontSize={12}
-                            >
-                              {dp.label}
-                            </text>
-                          </g>
-                        );
-                      })}
-                    </svg>
-                  </div>
                 </div>
-
-                {config.xAxisLabel && (
-                  <div
-                    className="text-center text-sm"
-                    style={{ color: config.textColor, fontFamily: "'Geist', sans-serif", fontStyle: "italic", opacity: 0.8 }}
-                  >
-                    {config.xAxisLabel}
-                  </div>
-                )}
-              </div>
               </div>
             </CardContent>
           </Card>
