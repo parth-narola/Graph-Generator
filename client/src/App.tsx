@@ -13,6 +13,7 @@ import AreaChart from "@/pages/area-chart";
 import MultipleBarChart from "@/pages/multiple-bar-chart";
 import PieChartPage from "@/pages/pie-chart";
 import ScatterChartPage from "@/pages/scatter-chart";
+import StackedBarChartPage from "@/pages/stacked-bar-chart";
 
 function Navigation() {
   const [location] = useLocation();
@@ -34,6 +35,9 @@ function Navigation() {
           <Button variant={location === "/multiple" ? "default" : "ghost"} size="sm">
             Multiple Bar Chart
           </Button>
+        </Link>
+        <Link href="/stacked">
+          <Button variant={location === "/stacked" ? "default" : "ghost"} size="sm">Stacked Bar</Button>
         </Link>
         <Link href="/pie">
           <Button variant={location === "/pie" ? "default" : "ghost"} size="sm">
@@ -66,6 +70,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/single" component={SingleBarChart} />
       <Route path="/multiple" component={MultipleBarChart} />
+      <Route path="/stacked" component={StackedBarChartPage} />
       <Route path="/pie" component={PieChartPage} />
       <Route path="/scatter" component={ScatterChartPage} />
       <Route path="/line" component={LineChart} />

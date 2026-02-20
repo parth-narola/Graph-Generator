@@ -13,10 +13,24 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from "recharts";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
+  Legend,
+} from "recharts";
 import testdinoLogo from "@assets/image_1769153159547.png";
 
-const defaultColors = ["#9b4f82", "#e8a5d0", "#6b8e9c", "#7cb97c", "#d4a574", "#c9726b"];
+const defaultColors = [
+  "#9b4f82",
+  "#e8a5d0",
+  "#6b8e9c",
+  "#7cb97c",
+  "#d4a574",
+  "#c9726b",
+];
 
 interface PieDataPoint {
   id: string;
@@ -53,49 +67,74 @@ export default function PieChartPage() {
   const [isExporting, setIsExporting] = useState(false);
   const chartRef = useRef<HTMLDivElement>(null);
 
-  const updateConfig = <K extends keyof PieChartConfig>(key: K, value: PieChartConfig[K]) => {
-    setConfig(prev => ({ ...prev, [key]: value }));
+  const updateConfig = <K extends keyof PieChartConfig>(
+    key: K,
+    value: PieChartConfig[K],
+  ) => {
+    setConfig((prev) => ({ ...prev, [key]: value }));
   };
 
-  const updateDataPoint = (id: string, field: keyof PieDataPoint, value: string | number) => {
-    setConfig(prev => ({
+  const updateDataPoint = (
+    id: string,
+    field: keyof PieDataPoint,
+    value: string | number,
+  ) => {
+    setConfig((prev) => ({
       ...prev,
-      dataPoints: prev.dataPoints.map(dp => dp.id === id ? { ...dp, [field]: value } : dp),
+      dataPoints: prev.dataPoints.map((dp) =>
+        dp.id === id ? { ...dp, [field]: value } : dp,
+      ),
     }));
   };
 
   const addDataPoint = () => {
     const newId = Date.now().toString();
-    const color = defaultColors[config.dataPoints.length % defaultColors.length];
-    setConfig(prev => ({
+    const color =
+      defaultColors[config.dataPoints.length % defaultColors.length];
+    setConfig((prev) => ({
       ...prev,
-      dataPoints: [...prev.dataPoints, { id: newId, name: "New Category", value: 10, color }],
+      dataPoints: [
+        ...prev.dataPoints,
+        { id: newId, name: "New Category", value: 10, color },
+      ],
     }));
   };
 
   const removeDataPoint = (id: string) => {
-    setConfig(prev => ({
+    setConfig((prev) => ({
       ...prev,
-      dataPoints: prev.dataPoints.filter(dp => dp.id !== id),
+      dataPoints: prev.dataPoints.filter((dp) => dp.id !== id),
     }));
   };
 
-  const exportChart = useCallback(async (format: "png" | "svg") => {
-    if (!chartRef.current) return;
-    setIsExporting(true);
-    try {
-      const options = { quality: 1, pixelRatio: 2, backgroundColor: config.backgroundColor, skipFonts: true };
-      const dataUrl = format === "svg" ? await toSvg(chartRef.current, options) : await toPng(chartRef.current, options);
-      const link = document.createElement("a");
-      link.download = `pie-chart.${format}`;
-      link.href = dataUrl;
-      link.click();
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsExporting(false);
-    }
-  }, [config.backgroundColor]);
+  const exportChart = useCallback(
+    async (format: "png" | "svg") => {
+      if (!chartRef.current) return;
+      setIsExporting(true);
+      try {
+        const options = {
+          quality: 1,
+          pixelRatio: 3,
+          backgroundColor: config.backgroundColor,
+          skipFonts: true,
+          style: { margin: "0", transform: "none" },
+        };
+        const dataUrl =
+          format === "svg"
+            ? await toSvg(chartRef.current, options)
+            : await toPng(chartRef.current, options);
+        const link = document.createElement("a");
+        link.download = `pie-chart.${format}`;
+        link.href = dataUrl;
+        link.click();
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsExporting(false);
+      }
+    },
+    [config.backgroundColor],
+  );
 
   return (
     <div className="min-h-screen bg-background">
@@ -109,12 +148,18 @@ export default function PieChartPage() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button disabled={isExporting}>
-                  <Download className="w-4 h-4 mr-2" /> {isExporting ? "Exporting..." : "Export"} <ChevronDown className="w-4 h-4 ml-2" />
+                  <Download className="w-4 h-4 mr-2" />{" "}
+                  {isExporting ? "Exporting..." : "Export"}{" "}
+                  <ChevronDown className="w-4 h-4 ml-2" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => exportChart("png")}>Export as PNG</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => exportChart("svg")}>Export as SVG</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => exportChart("png")}>
+                  Export as PNG
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => exportChart("svg")}>
+                  Export as SVG
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -122,13 +167,18 @@ export default function PieChartPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <Card className="lg:col-span-1">
-            <CardHeader><CardTitle>Configuration</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle>Configuration</CardTitle>
+            </CardHeader>
             <CardContent>
               <ScrollArea className="h-[calc(100vh-220px)]">
                 <div className="space-y-6 pr-4">
                   <div className="space-y-2">
                     <Label>Chart Title</Label>
-                    <Input value={config.title} onChange={e => updateConfig("title", e.target.value)} />
+                    <Input
+                      value={config.title}
+                      onChange={(e) => updateConfig("title", e.target.value)}
+                    />
                   </div>
 
                   <div className="flex items-center gap-3">
@@ -136,10 +186,14 @@ export default function PieChartPage() {
                       type="checkbox"
                       id="isDonut"
                       checked={config.isDonut}
-                      onChange={e => updateConfig("isDonut", e.target.checked)}
-                      className="w-4 h-4 rounded border-border"
+                      onChange={(e) =>
+                        updateConfig("isDonut", e.target.checked)
+                      }
+                      className="w-4 h-4 rounded border-border cursor-pointer"
                     />
-                    <Label htmlFor="isDonut" className="cursor-pointer">Donut Style</Label>
+                    <Label htmlFor="isDonut" className="cursor-pointer">
+                      Donut Style
+                    </Label>
                   </div>
 
                   <Separator />
@@ -147,30 +201,82 @@ export default function PieChartPage() {
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
                       <Label>Data Points</Label>
-                      <Button size="sm" variant="outline" onClick={addDataPoint}><Plus className="w-4 h-4 mr-1" /> Add Slice</Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={addDataPoint}
+                      >
+                        <Plus className="w-4 h-4 mr-1" /> Add Slice
+                      </Button>
                     </div>
                     {config.dataPoints.map((dp, index) => (
                       <Card key={dp.id} className="p-3">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-medium">Slice {index + 1}</span>
-                          <Button size="icon" variant="ghost" onClick={() => removeDataPoint(dp.id)} disabled={config.dataPoints.length <= 1}>
+                          <span className="text-sm font-medium">
+                            Slice {index + 1}
+                          </span>
+                          <Button
+                            size="icon"
+                            variant="ghost"
+                            onClick={() => removeDataPoint(dp.id)}
+                            disabled={config.dataPoints.length <= 1}
+                            className="text-destructive h-8 w-8"
+                          >
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         </div>
                         <div className="grid grid-cols-2 gap-2">
                           <div>
                             <Label className="text-xs">Label</Label>
-                            <Input value={dp.name} onChange={e => updateDataPoint(dp.id, "name", e.target.value)} className="h-8 text-sm" />
+                            <Input
+                              value={dp.name}
+                              onChange={(e) =>
+                                updateDataPoint(dp.id, "name", e.target.value)
+                              }
+                              className="h-8 text-sm"
+                            />
                           </div>
                           <div>
                             <Label className="text-xs">Value</Label>
-                            <Input type="number" value={dp.value} onChange={e => updateDataPoint(dp.id, "value", Number(e.target.value))} className="h-8 text-sm" />
+                            <Input
+                              type="number"
+                              value={dp.value}
+                              onChange={(e) =>
+                                updateDataPoint(
+                                  dp.id,
+                                  "value",
+                                  Number(e.target.value),
+                                )
+                              }
+                              className="h-8 text-sm"
+                            />
                           </div>
                           <div className="col-span-2">
                             <Label className="text-xs">Color</Label>
                             <div className="flex gap-2">
-                              <input type="color" value={dp.color} onChange={e => updateDataPoint(dp.id, "color", e.target.value)} className="w-10 h-8 rounded cursor-pointer" />
-                              <Input value={dp.color} onChange={e => updateDataPoint(dp.id, "color", e.target.value)} className="flex-1 h-8 text-xs" />
+                              <input
+                                type="color"
+                                value={dp.color}
+                                onChange={(e) =>
+                                  updateDataPoint(
+                                    dp.id,
+                                    "color",
+                                    e.target.value,
+                                  )
+                                }
+                                className="w-10 h-8 rounded cursor-pointer"
+                              />
+                              <Input
+                                value={dp.color}
+                                onChange={(e) =>
+                                  updateDataPoint(
+                                    dp.id,
+                                    "color",
+                                    e.target.value,
+                                  )
+                                }
+                                className="flex-1 h-8 text-xs"
+                              />
                             </div>
                           </div>
                         </div>
@@ -183,36 +289,61 @@ export default function PieChartPage() {
           </Card>
 
           <Card className="lg:col-span-2">
-            <CardHeader><CardTitle>Preview</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle>Preview</CardTitle>
+            </CardHeader>
             <CardContent>
               <div className="overflow-auto">
-                <div ref={chartRef} className="p-8 min-w-[600px] flex flex-col items-center" style={{ backgroundColor: config.backgroundColor, border: `1px solid ${config.borderColor}` }}>
+                <div
+                  ref={chartRef}
+                  className="p-8 min-w-[600px] flex flex-col items-center"
+                  style={{
+                    backgroundColor: config.backgroundColor,
+                    border: `1px solid ${config.borderColor}`,
+                  }}
+                >
                   <div className="flex items-start justify-between w-full mb-4">
-                    <h2 className="text-xl font-bold" style={{ color: config.textColor }}>{config.title}</h2>
+                    <h2
+                      className="text-xl font-bold"
+                      style={{ color: config.textColor }}
+                    >
+                      {config.title}
+                    </h2>
                     <img src={testdinoLogo} alt="Logo" className="h-8 w-auto" />
                   </div>
-                  
+
                   <div style={{ width: "100%", height: "400px" }}>
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie
                           data={config.dataPoints}
-                          cx="50%"
+                          cx="40%"
                           cy="50%"
                           innerRadius={config.isDonut ? 100 : 0}
-                          outerRadius={150}
+                          outerRadius={130}
                           paddingAngle={config.isDonut ? 5 : 0}
                           dataKey="value"
-                          isAnimationActive={false} // Required for Export to work smoothly
+                          isAnimationActive={false}
                           stroke={config.backgroundColor}
-                          strokeWidth={2}
+                          strokeWidth={3}
+                          label={({ name, percent }) =>
+                            `${name}: ${(percent * 100).toFixed(0)}%`
+                          }
                         >
                           {config.dataPoints.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.color} />
                           ))}
                         </Pie>
-                        <Tooltip contentStyle={{ borderRadius: '8px' }} />
-                        <Legend wrapperStyle={{ color: config.textColor }} />
+                        <Tooltip contentStyle={{ borderRadius: "8px" }} />
+                        <Legend
+                          layout="vertical"
+                          verticalAlign="middle"
+                          align="right"
+                          wrapperStyle={{
+                            color: config.textColor,
+                            paddingLeft: "20px",
+                          }}
+                        />
                       </PieChart>
                     </ResponsiveContainer>
                   </div>
