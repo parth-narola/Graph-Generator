@@ -449,7 +449,7 @@ export default function Home() {
               <div className="overflow-auto">
                 <div
                   ref={chartRef}
-                  className=" p-8 min-w-[600px]"
+                  className="rounded-lg p-8 min-w-[600px]"
                   style={{
                     backgroundColor: config.backgroundColor,
                     border: `1px solid ${config.borderColor}`,

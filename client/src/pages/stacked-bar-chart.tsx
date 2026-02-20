@@ -13,90 +13,143 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-// Removed Legend from recharts as we are using a custom HTML one
 import {
-  ScatterChart,
-  Scatter,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
   ResponsiveContainer,
-  Cell,
+  LabelList,
 } from "recharts";
 import testdinoLogo from "@assets/image_1769153159547.png";
 
 const defaultColors = ["#9b4f82", "#e8a5d0", "#6b8e9c", "#7cb97c", "#d4a574"];
 
-interface ScatterDataPoint {
+interface ChartSeries {
   id: string;
   name: string;
-  x: number;
-  y: number;
   color: string;
 }
 
-interface ScatterChartConfig {
+interface DataPoint {
+  id: string;
+  label: string;
+  values: Record<string, number>;
+}
+
+interface StackedChartConfig {
   title: string;
   xAxisLabel: string;
   yAxisLabel: string;
   backgroundColor: string;
   borderColor: string;
   textColor: string;
-  dataPoints: ScatterDataPoint[];
+  series: ChartSeries[];
+  dataPoints: DataPoint[];
 }
 
-const defaultConfig: ScatterChartConfig = {
-  title: "Execution Time vs Test Coverage",
-  xAxisLabel: "Test Coverage (%)",
-  yAxisLabel: "Execution Time (mins)",
+const defaultConfig: StackedChartConfig = {
+  title: "Revenue Breakdown by Product Line",
+  xAxisLabel: "Quarter",
+  yAxisLabel: "Revenue (in Thousands)",
   backgroundColor: "#fafafa",
   borderColor: "#e0e0e0",
   textColor: "#1a1a1a",
+  series: [
+    { id: "s1", name: "Software", color: "#9b4f82" },
+    { id: "s2", name: "Hardware", color: "#6b8e9c" },
+    { id: "s3", name: "Services", color: "#e8a5d0" },
+  ],
   dataPoints: [
-    { id: "1", name: "Suite A", x: 85, y: 12, color: "#9b4f82" },
-    { id: "2", name: "Suite B", x: 60, y: 5, color: "#e8a5d0" },
-    { id: "3", name: "Suite C", x: 92, y: 18, color: "#6b8e9c" },
-    { id: "4", name: "Suite D", x: 45, y: 3, color: "#7cb97c" },
-    { id: "5", name: "Suite E", x: 78, y: 15, color: "#d4a574" },
+    { id: "1", label: "Q1", values: { s1: 4000, s2: 2400, s3: 2400 } },
+    { id: "2", label: "Q2", values: { s1: 3000, s2: 1398, s3: 2210 } },
+    { id: "3", label: "Q3", values: { s1: 2000, s2: 9800, s3: 2290 } },
+    { id: "4", label: "Q4", values: { s1: 2780, s2: 3908, s3: 2000 } },
   ],
 };
 
-export default function ScatterChartPage() {
-  const [config, setConfig] = useState<ScatterChartConfig>(defaultConfig);
+export default function StackedBarChartPage() {
+  const [config, setConfig] = useState<StackedChartConfig>(defaultConfig);
   const [isExporting, setIsExporting] = useState(false);
   const chartRef = useRef<HTMLDivElement>(null);
 
-  const updateConfig = <K extends keyof ScatterChartConfig>(
+  const updateConfig = <K extends keyof StackedChartConfig>(
     key: K,
-    value: ScatterChartConfig[K],
+    value: StackedChartConfig[K],
   ) => {
     setConfig((prev) => ({ ...prev, [key]: value }));
   };
 
-  const updateDataPoint = (
+  const addSeries = () => {
+    const newId = `s${Date.now()}`;
+    const color = defaultColors[config.series.length % defaultColors.length];
+    setConfig((prev) => ({
+      ...prev,
+      series: [...prev.series, { id: newId, name: `New Segment`, color }],
+      dataPoints: prev.dataPoints.map((dp) => ({
+        ...dp,
+        values: { ...dp.values, [newId]: 1000 },
+      })),
+    }));
+  };
+
+  const updateSeries = (
     id: string,
-    field: keyof ScatterDataPoint,
-    value: string | number,
+    field: keyof ChartSeries,
+    value: string,
   ) => {
     setConfig((prev) => ({
       ...prev,
-      dataPoints: prev.dataPoints.map((dp) =>
-        dp.id === id ? { ...dp, [field]: value } : dp,
+      series: prev.series.map((s) =>
+        s.id === id ? { ...s, [field]: value } : s,
       ),
+    }));
+  };
+
+  const removeSeries = (id: string) => {
+    setConfig((prev) => ({
+      ...prev,
+      series: prev.series.filter((s) => s.id !== id),
     }));
   };
 
   const addDataPoint = () => {
     const newId = Date.now().toString();
-    const color =
-      defaultColors[config.dataPoints.length % defaultColors.length];
+    const initialValues: Record<string, number> = {};
+    config.series.forEach((s) => (initialValues[s.id] = 1000));
     setConfig((prev) => ({
       ...prev,
       dataPoints: [
         ...prev.dataPoints,
-        { id: newId, name: "New Point", x: 50, y: 10, color },
+        { id: newId, label: "New Data", values: initialValues },
       ],
+    }));
+  };
+
+  const updateDataPointValue = (
+    pointId: string,
+    seriesId: string,
+    value: number,
+  ) => {
+    setConfig((prev) => ({
+      ...prev,
+      dataPoints: prev.dataPoints.map((dp) =>
+        dp.id === pointId
+          ? { ...dp, values: { ...dp.values, [seriesId]: value } }
+          : dp,
+      ),
+    }));
+  };
+
+  const updateDataPointLabel = (pointId: string, label: string) => {
+    setConfig((prev) => ({
+      ...prev,
+      dataPoints: prev.dataPoints.map((dp) =>
+        dp.id === pointId ? { ...dp, label } : dp,
+      ),
     }));
   };
 
@@ -112,19 +165,21 @@ export default function ScatterChartPage() {
       if (!chartRef.current) return;
       setIsExporting(true);
       try {
+        const node = chartRef.current;
         const options = {
           quality: 1,
           pixelRatio: 3,
           backgroundColor: config.backgroundColor,
-          skipFonts: true,
+          width: node.clientWidth + 2,
+          height: node.clientHeight + 2,
           style: { margin: "0", transform: "none" },
         };
         const dataUrl =
           format === "svg"
-            ? await toSvg(chartRef.current, options)
-            : await toPng(chartRef.current, options);
+            ? await toSvg(node, options)
+            : await toPng(node, options);
         const link = document.createElement("a");
-        link.download = `scatter-chart.${format}`;
+        link.download = `stacked-bar.${format}`;
         link.href = dataUrl;
         link.click();
       } catch (err) {
@@ -141,7 +196,7 @@ export default function ScatterChartPage() {
       <div className="container mx-auto p-6">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold font-sans">
-            Scatter Chart Generator
+            Stacked Bar Chart Generator
           </h1>
           <div className="flex gap-2">
             <Button variant="outline" onClick={() => setConfig(defaultConfig)}>
@@ -207,6 +262,45 @@ export default function ScatterChartPage() {
 
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
+                      <Label>Stack Segments</Label>
+                      <Button size="sm" variant="outline" onClick={addSeries}>
+                        <Plus className="w-4 h-4 mr-1" /> Add Segment
+                      </Button>
+                    </div>
+                    {config.series.map((s) => (
+                      <div key={s.id} className="flex gap-2 items-center mb-2">
+                        <input
+                          type="color"
+                          value={s.color}
+                          onChange={(e) =>
+                            updateSeries(s.id, "color", e.target.value)
+                          }
+                          className="w-8 h-8 rounded cursor-pointer shrink-0"
+                        />
+                        <Input
+                          value={s.name}
+                          onChange={(e) =>
+                            updateSeries(s.id, "name", e.target.value)
+                          }
+                          className="h-8 text-sm"
+                        />
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          onClick={() => removeSeries(s.id)}
+                          disabled={config.series.length <= 1}
+                          className="shrink-0 h-8 w-8 text-destructive"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+
+                  <Separator />
+
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
                       <Label>Data Points</Label>
                       <Button
                         size="sm"
@@ -216,69 +310,50 @@ export default function ScatterChartPage() {
                         <Plus className="w-4 h-4 mr-1" /> Add Point
                       </Button>
                     </div>
-                    {config.dataPoints.map((dp, index) => (
-                      <Card key={dp.id} className="p-3 mb-2">
-                        <div className="flex items-center justify-between mb-2">
+                    {config.dataPoints.map((dp) => (
+                      <Card key={dp.id} className="p-3 mb-3">
+                        <div className="flex justify-between items-center mb-2">
                           <Input
-                            value={dp.name}
+                            value={dp.label}
                             onChange={(e) =>
-                              updateDataPoint(dp.id, "name", e.target.value)
+                              updateDataPointLabel(dp.id, e.target.value)
                             }
                             className="h-8 w-2/3"
-                            placeholder="Point Name"
+                            placeholder="Label"
                           />
                           <Button
                             size="icon"
                             variant="ghost"
                             onClick={() => removeDataPoint(dp.id)}
                             disabled={config.dataPoints.length <= 1}
-                            className="text-destructive"
+                            className="h-8 w-8 text-destructive"
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         </div>
-                        <div className="grid grid-cols-3 gap-2">
-                          <div>
-                            <Label className="text-[10px]">X Value</Label>
-                            <Input
-                              type="number"
-                              value={dp.x}
-                              onChange={(e) =>
-                                updateDataPoint(
-                                  dp.id,
-                                  "x",
-                                  Number(e.target.value),
-                                )
-                              }
-                              className="h-7 text-xs"
-                            />
-                          </div>
-                          <div>
-                            <Label className="text-[10px]">Y Value</Label>
-                            <Input
-                              type="number"
-                              value={dp.y}
-                              onChange={(e) =>
-                                updateDataPoint(
-                                  dp.id,
-                                  "y",
-                                  Number(e.target.value),
-                                )
-                              }
-                              className="h-7 text-xs"
-                            />
-                          </div>
-                          <div>
-                            <Label className="text-[10px]">Color</Label>
-                            <input
-                              type="color"
-                              value={dp.color}
-                              onChange={(e) =>
-                                updateDataPoint(dp.id, "color", e.target.value)
-                              }
-                              className="w-full h-7 rounded cursor-pointer p-0 border-0"
-                            />
-                          </div>
+                        <div className="grid grid-cols-2 gap-2 mt-2">
+                          {config.series.map((s) => (
+                            <div key={s.id}>
+                              <Label
+                                className="text-[10px] text-muted-foreground truncate"
+                                title={s.name}
+                              >
+                                {s.name}
+                              </Label>
+                              <Input
+                                type="number"
+                                value={dp.values[s.id] || 0}
+                                onChange={(e) =>
+                                  updateDataPointValue(
+                                    dp.id,
+                                    s.id,
+                                    Number(e.target.value),
+                                  )
+                                }
+                                className="h-7 text-xs"
+                              />
+                            </div>
+                          ))}
                         </div>
                       </Card>
                     ))}
@@ -301,15 +376,11 @@ export default function ScatterChartPage() {
                     backgroundColor: config.backgroundColor,
                     border: `1px solid ${config.borderColor}`,
                   }}
-                  data-testid="chart-preview"
                 >
-                  <div className="flex items-start justify-between w-full mb-4">
+                  <div className="flex items-start justify-between mb-4 gap-8">
                     <h2
                       className="text-xl font-bold flex-1"
-                      style={{
-                        color: config.textColor,
-                        fontFamily: "'Geist', sans-serif",
-                      }}
+                      style={{ color: config.textColor }}
                     >
                       {config.title}
                     </h2>
@@ -320,33 +391,12 @@ export default function ScatterChartPage() {
                     />
                   </div>
 
-                  {/* CUSTOM HTML LEGEND - Fixes export bugs! */}
-                  <div className="flex items-center flex-wrap gap-4 mb-6">
-                    {config.dataPoints.map((dp) => (
-                      <div key={dp.id} className="flex items-center gap-2">
-                        <div
-                          className="w-3 h-3 rounded-full shrink-0"
-                          style={{ backgroundColor: dp.color }}
-                        />
-                        <span
-                          style={{
-                            color: config.textColor,
-                            fontSize: "0.875rem",
-                            fontFamily: "'Geist', sans-serif",
-                          }}
-                        >
-                          {dp.name}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-
                   {/* HTML WRAPPER LAYOUT FOR AXES */}
                   <div
                     className="flex items-stretch w-full"
                     style={{ height: "400px" }}
                   >
-                    {/* HTML Y-Axis Label */}
+                    {/* HTML Y-Axis */}
                     {config.yAxisLabel && (
                       <div
                         className="flex items-center justify-center shrink-0 mr-2"
@@ -374,55 +424,50 @@ export default function ScatterChartPage() {
                       }}
                     >
                       <ResponsiveContainer width="100%" height="100%">
-                        <ScatterChart
+                        <BarChart
+                          data={config.dataPoints}
                           margin={{ top: 20, right: 30, left: 10, bottom: 20 }}
                         >
                           <CartesianGrid
                             strokeDasharray="3 3"
-                            opacity={0.3}
                             stroke={config.textColor}
+                            opacity={0.2}
                           />
                           <XAxis
-                            type="number"
-                            dataKey="x"
-                            name="X"
-                            tick={{ fill: config.textColor, opacity: 0.7 }}
+                            dataKey="label"
                             stroke={config.textColor}
+                            tick={{ fill: config.textColor }}
                           />
                           <YAxis
-                            type="number"
-                            dataKey="y"
-                            name="Y"
-                            width={80}
-                            tick={{ fill: config.textColor, opacity: 0.7 }}
                             stroke={config.textColor}
+                            tick={{ fill: config.textColor }}
+                            width={80}
                           />
-                          <Tooltip
-                            cursor={{ strokeDasharray: "3 3" }}
-                            contentStyle={{
-                              borderRadius: "8px",
-                              fontFamily: "'Geist', sans-serif",
-                            }}
-                            formatter={(
-                              value: number,
-                              name: string,
-                              props: any,
-                            ) => [value, props.payload.name || name]}
-                          />
+                          <Tooltip contentStyle={{ borderRadius: "8px" }} />
+                          <Legend wrapperStyle={{ paddingTop: "20px" }} />
 
-                          {/* Render Scatter points */}
-                          {config.dataPoints.map((dp) => (
-                            <Scatter
-                              key={dp.id}
-                              name={dp.name}
-                              data={[dp]}
-                              fill={dp.color}
+                          {config.series.map((s) => (
+                            <Bar
+                              key={s.id}
+                              dataKey={`values.${s.id}`}
+                              name={s.name}
+                              stackId="a"
+                              fill={s.color}
                               isAnimationActive={false}
                             >
-                              <Cell key={`cell-${dp.id}`} fill={dp.color} />
-                            </Scatter>
+                              <LabelList
+                                dataKey={`values.${s.id}`}
+                                position="center"
+                                fill="#ffffff"
+                                fontSize={12}
+                                fontWeight="bold"
+                                formatter={(val: number) =>
+                                  val > 0 ? val : ""
+                                }
+                              />
+                            </Bar>
                           ))}
-                        </ScatterChart>
+                        </BarChart>
                       </ResponsiveContainer>
                     </div>
                   </div>
